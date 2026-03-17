@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Fruit Shop</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f5f5f5;
+    }
+
+    /* HEADER */
+    header {
+      background: #4CAF50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    nav {
+      background: #66bb6a;
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* SECTION */
+    .section {
+      padding: 20px;
+    }
+
+    .title {
+      color: green;
+      border-left: 5px solid green;
+      padding-left: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* GRID */
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .card {
+      width: 200px;
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .card button {
+      background: green;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    /* PAGINATION */
+    .pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .pagination button {
+      margin: 3px;
+      padding: 5px 10px;
+    }
+
+  </style>
+    <style>
+        /* DÁN CSS Ở ĐÂY */
+    
+        .header {
+          background: linear-gradient(to right, #2e7d32, #66bb6a);
+          color: white;
+        }
+    
+        .top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 15px 20px;
+        }
+    
+        .left {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+    
+        .logo {
+          height: 100px;
+        }
+    
+        .right {
+          display: flex;
+          gap: 15px;
+          align-items: center;
+        }
+    
+        .menu {
+          display: flex;
+          justify-content: center;
+          gap: 30px;
+          background: rgba(0,0,0,0.1);
+          padding: 10px;
+        }
+    
+        .menu a {
+          color: white;
+          text-decoration: none;
+          font-weight: bold;
+        }
+    
+      </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="top">
+          <div class="left">
+            <img src="logo.png" class="logo">
+            <h1>Fruit Shop</h1>
+          </div>
+      
+          <div class="right">
+            <button class="contact">📞 Liên hệ: 0909xxx</button>
+            <div class="cart">🛒 Giỏ hàng: 0</div>
+          </div>
+        </div>
+      
+        
+      </header>
+
+<nav>
+  <a href="#">Trang chủ</a>
+  <a href="#">Giới thiệu</a>
+  <a href="#">Sản phẩm</a>
+  <a href="#">Khuyến mãi</a>
+  <a href="#">Tin tức</a>
+</nav>
+
+<div class="section">
+  <h2 class="title">Trái cây ngoại</h2>
+  <div id="ngoai" class="grid"></div>
+</div>
+
+<div class="section">
+  <h2 class="title">Trái cây nội</h2>
+  <div id="noi" class="grid"></div>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+<script>
+let allFruits = []
+let currentPage = 1
+const perPage = 6
+
+async function loadFruits() {
+  const res = await fetch("http://localhost:3000/api/fruits")
+  allFruits = await res.json()
+  render()
+}
+
+function render() {
+  document.getElementById("ngoai").innerHTML = ""
+  document.getElementById("noi").innerHTML = ""
+
+  const start = (currentPage - 1) * perPage
+  const pageData = allFruits.slice(start, start + perPage)
+
+  pageData.forEach(fruit => {
+    const card = `
+      <div class="card">
+        <img src="http://localhost:3000${fruit.image}">
+        <h3>${fruit.name}</h3>
+        <button onclick="contact()">Liên hệ</button>
+      </div>
+    `
+
+    if (fruit.category === "ngoai") {
+      document.getElementById("ngoai").innerHTML += card
+    } else {
+      document.getElementById("noi").innerHTML += card
+    }
+  })
+
+  renderPagination()
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(allFruits.length / perPage)
+  let html = ""
+
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button onclick="goPage(${i})">${i}</button>`
+  }
+
+  document.getElementById("pagination").innerHTML = html
+}
+
+function goPage(page) {
+  currentPage = page
+  render()
+}
+
+function contact() {
+  alert("Liên hệ: 0909xxx")
+}
+
+loadFruits()
+</script>
+
+</body>
+</html>

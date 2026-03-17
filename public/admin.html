@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Fruit Shop</title>
+
+<style>
+
+body{
+font-family:Arial;
+padding:40px;
+background:#f5f5f5
+}
+
+input{
+padding:8px;
+margin:5px
+}
+
+button{
+padding:8px 12px;
+background:#2e7d32;
+color:white;
+border:none;
+cursor:pointer
+}
+
+.item{
+background:white;
+padding:10px;
+margin:10px 0;
+border-radius:6px
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Admin quản lý trái cây</h2>
+
+<div>
+
+<input id="name" placeholder="Tên trái cây">
+<input id="price" placeholder="Giá">
+<input id="image" placeholder="Link ảnh">
+<input id="description" placeholder="Mô tả">
+
+<button onclick="addFruit()">Thêm</button>
+
+</div>
+
+<h3>Danh sách trái cây</h3>
+
+<div id="list"></div>
+
+<script>
+
+function load(){
+
+fetch("/fruits")
+.then(res=>res.json())
+.then(data=>{
+
+let html=""
+
+data.forEach(f=>{
+
+html+=`
+<div class="item">
+<b>${f.name}</b> - ${f.price} VND
+<button onclick="deleteFruit('${f._id}')">Xoá</button>
+</div>
+`
+
+})
+
+document.getElementById("list").innerHTML=html
+
+})
+
+}
+
+function addFruit(){
+
+fetch("/fruits",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:document.getElementById("name").value,
+price:document.getElementById("price").value,
+image:document.getElementById("image").value,
+description:document.getElementById("description").value
+})
+})
+.then(()=>load())
+
+}
+
+function deleteFruit(id){
+
+fetch("/fruits/"+id,{
+method:"DELETE"
+})
+.then(()=>load())
+
+}
+
+load()
+
+</script>
+
+</body>
+</html>
