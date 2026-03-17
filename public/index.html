@@ -97,63 +97,92 @@
         /* DÁN CSS Ở ĐÂY */
     
         .header {
-          background: linear-gradient(to right, #2e7d32, #66bb6a);
-          color: white;
-        }
-    
-        .top {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 15px 20px;
-        }
-    
-        .left {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-        }
-    
-        .logo {
-          height: 100px;
-        }
-    
-        .right {
-          display: flex;
-          gap: 15px;
-          align-items: center;
-        }
-    
-        .menu {
-          display: flex;
-          justify-content: center;
-          gap: 30px;
-          background: rgba(0,0,0,0.1);
-          padding: 10px;
-        }
-    
-        .menu a {
-          color: white;
-          text-decoration: none;
-          font-weight: bold;
-        }
-    
+  background: linear-gradient(135deg, #2e7d32, #66bb6a);
+  color: white;
+}
+
+/* TOP */
+.top {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+/* LEFT */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  height: 120px;
+}
+
+.left h1 {
+  font-size: 24px;
+}
+
+/* RIGHT */
+.right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.info {
+  background: rgba(255,255,255,0.2);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.cart {
+  background: #ffeb3b;
+  color: black;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+/* MENU */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 10px;
+  background: rgba(0,0,0,0.1);
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.menu a:hover {
+  color: #ffeb3b;
+}
       </style>
 </head>
 <body>
 
     <header class="header">
         <div class="top">
-          <div class="left">
-            <img src="logo.png" class="logo">
-            <h1>Fruit Shop</h1>
+            <div class="left">
+              <img src="logo.png" class="logo">
+              <h1>Fruit Shop</h1>
+            </div>
+          
+            <div class="right">
+              <div class="info">📍 103 Lạc Long Quân, Q11</div>
+              <div class="info">📞 0909xxx</div>
+              <div class="cart">🛒 0</div>
+            </div>
           </div>
-      
-          <div class="right">
-            <button class="contact">📞 Liên hệ: 0909xxx</button>
-            <div class="cart">🛒 Giỏ hàng: 0</div>
-          </div>
-        </div>
       
         
       </header>
