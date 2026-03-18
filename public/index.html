@@ -5,201 +5,128 @@
 <title>Fruit Shop - Trái Cây Nhập Khẩu</title>
 <style>
 /* Reset cơ bản */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: Arial, sans-serif; background:#f5f5f5; color:#333; line-height:1.5; }
 
-/* body */
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  line-height: 1.5;
-  color: #333;
-}
-
-/* header */
+/* header full width */
 .header {
-  background: linear-gradient(135deg, #2e7d32, #66bb6a);
-  color: white;
-  padding: 20px 0;
+  background: linear-gradient(135deg,#2e7d32,#66bb6a);
+  color:white;
+  padding:20px 50px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
 }
+.left { display:flex; align-items:center; gap:20px; }
+.logo { height: 120px;0px; border-radius:10px; }
+.left h1 { font-size:28px; font-weight:bold; color:white; }
+.top-info { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+.info { background: rgba(255,255,255,0.2); padding:6px 14px; border-radius:20px; font-size:14px; }
+.cart { background:#ffeb3b; color:black; padding:6px 14px; border-radius:20px; font-weight:bold; }
 
-/* top container */
-.top {
-  max-width: 1200px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 15px;
-}
-
-/* logo */
-.logo {
-  height: 200px;
-  margin-right: 15px;
-  vertical-align: middle;
-}
-
-/* header left */
-.left h1 {
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-/* header right */
-.top-info {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-/* info boxes */
-.info {
-  background: rgba(255,255,255,0.2);
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-}
-
-/* cart */
-.cart {
-  background: #ffeb3b;
-  color: black;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-weight: bold;
-}
-
-/* nav bar */
+/* nav full width */
 nav {
-  background: #66bb6a;
-  text-align: center;
-  padding: 10px 0;
+  background:#66bb6a;
+  text-align:center;
+  padding:12px 0;
 }
-
 nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  margin: 0 15px;
-  font-size: 16px;
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  margin:0 20px;
+  font-size:16px;
   transition: color 0.3s;
 }
+nav a:hover { color:#ffeb3b; }
 
-nav a:hover {
-  color: #ffeb3b;
-}
-
-/* sections */
+/* sections full width */
 .section {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 15px;
+  width:100%;
+  padding:40px 50px;
+  background:#f5f5f5;
 }
-
-/* title */
 .title {
-  color: green;
-  border-left: 5px solid green;
-  padding-left: 10px;
-  margin-bottom: 15px;
-  font-size: 22px;
+  color:#2e7d32;
+  border-left:5px solid #2e7d32;
+  padding-left:12px;
+  margin-bottom:25px;
+  font-size:26px;
 }
 
-/* grid */
+/* grid full width */
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:25px;
+  justify-content:flex-start;
 }
 
 /* card */
 .card {
-  width: 200px;
-  background: white;
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  background:white;
+  flex:1 1 220px;
+  max-width:220px;
+  border-radius:12px;
+  border:2px solid #2e7d32;
+  padding:15px;
+  text-align:center;
+  box-shadow:0 3px 8px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
-
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow:0 8px 20px rgba(0,0,0,0.25);
+  border-color:#1b5e20;
 }
-
 .card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  width:100%;
+  height:150px;
+  object-fit:cover;
+  border-radius:10px;
+  margin-bottom:12px;
 }
-
-.card h3 {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-
-.card p {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #555;
-}
-
+.card h3 { font-size:18px; margin-bottom:10px; color:#2e7d32; }
 .card button {
-  background: green;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 5px;
+  background:#2e7d32;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  cursor:pointer;
+  border-radius:6px;
+  font-size:14px;
   transition: background 0.3s;
 }
+.card button:hover { background:#1b5e20; }
 
-.card button:hover {
-  background: #2e7d32;
-}
-
-/* footer */
+/* footer full width */
 footer {
-  background: #66bb6a;
-  color: white;
-  text-align: center;
-  padding: 20px 0;
-  margin-top: 30px;
-  font-size: 14px;
+  width:100%;
+  background:#66bb6a;
+  color:white;
+  text-align:center;
+  padding:25px 50px;
+  font-size:14px;
 }
-
-footer a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-footer a:hover {
-  color: #ffeb3b;
-}
+footer a { color:white; text-decoration:none; font-weight:bold; }
+footer a:hover { color:#ffeb3b; }
 
 /* responsive */
-@media(max-width: 768px){
-  .top {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
-  .top-info {
-    justify-content: center;
-  }
-  .grid {
-    justify-content: center;
-  }
+@media(max-width: 1200px){
+  .header, .section, footer { padding:20px; }
+}
+@media(max-width: 992px){
+  .grid { justify-content:center; }
+}
+@media(max-width:768px){
+  .header { flex-direction:column; gap:15px; text-align:center; }
+  .top-info { justify-content:center; flex-wrap:wrap; gap:10px; }
+  .card { flex:1 1 45%; max-width:45%; }
+}
+@media(max-width:480px){
+  .card { flex:1 1 100%; max-width:100%; }
+  nav a { display:block; margin:8px 0; }
 }
 </style>
 </head>
@@ -207,16 +134,14 @@ footer a:hover {
 
 <!-- header -->
 <header class="header">
-  <div class="top">
-    <div class="left">
-      <img src="logo.png" class="logo" alt="Logo">
-      <h1>TRÁI CÂY NHẬP KHẨU</h1>
-    </div>
-    <div class="top-info">
-      <div class="info">📍 103 Lạc Long Quân</div>
-      <div class="info">📞 0909xxx</div>
-      <div class="cart">🛒 0</div>
-    </div>
+  <div class="left">
+    <img src="logo.png" class="logo" alt="Logo">
+    <h1>TRÁI CÂY NHẬP KHẨU</h1>
+  </div>
+  <div class="top-info">
+    <div class="info">📍 103 Lạc Long Quân, HN</div>
+    <div class="info">📞 0909xxx</div>
+    <div class="cart">🛒 0</div>
   </div>
 </header>
 
@@ -232,28 +157,7 @@ footer a:hover {
 <!-- section trái cây -->
 <div class="section">
   <h2 class="title">Trái cây</h2>
-  <div class="grid" id="fruits">
-    <!-- card sẽ hiển thị ở đây -->
-  </div>
-</div>
-
-<!-- section khuyến mãi -->
-<div class="section">
-  <h2 class="title">Khuyến mãi</h2>
-  <div class="grid">
-    <div class="card">
-      <img src="uploads/tao.jpg" alt="Táo">
-      <h3>Táo Miễn Phí Vận Chuyển</h3>
-      <p>Áp dụng cho đơn trên 200k</p>
-      <button onclick="alert('Liên hệ: 0909xxx')">Liên hệ</button>
-    </div>
-    <div class="card">
-      <img src="uploads/cam.jpg" alt="Cam">
-      <h3>Cam Giảm Giá 10%</h3>
-      <p>Chỉ trong tuần này</p>
-      <button onclick="alert('Liên hệ: 0909xxx')">Liên hệ</button>
-    </div>
-  </div>
+  <div class="grid" id="fruits"></div>
 </div>
 
 <!-- footer -->
@@ -262,23 +166,23 @@ footer a:hover {
 </footer>
 
 <script>
-// danh sách ảnh trái cây
-// danh sách ảnh trái cây
 const fruitImages = [
-  { img: "uploads/tao.jpg", name: "Táo" },
-  { img: "uploads/cam.jpg", name: "Cam" },
-  { img: "uploads/cherry.jpg", name: "Cherry" },
-  { img: "uploads/dao.jpg", name: "Đào" },
-  { img: "uploads/dau.jpg", name: "Dâu" },
-  { img: "uploads/dualuoi.jpg", name: "Dưa Lưới" },
-  { img: "uploads/kiwi.jpg", name: "Kiwi" },
-  { img: "uploads/nho.jpg", name: "Nho" },
-  { img: "uploads/thom.jpg", name: "Thơm" },
-  { img: "uploads/xoai.jpg", name: "Xoài" }
+  { img:"uploads/tao.jpg", name:"Táo" },
+  { img:"uploads/cam.jpg", name:"Cam" },
+  { img:"uploads/cherry.jpg", name:"Cherry" },
+  { img:"uploads/dao.jpg", name:"Đào" },
+  { img:"uploads/dau.jpg", name:"Dâu" },
+  { img:"uploads/dualuoi.jpg", name:"Dưa Lưới" },
+  { img:"uploads/kiwi.jpg", name:"Kiwi" },
+  { img:"uploads/nho.jpg", name:"Nho" },
+  { img:"uploads/thom.jpg", name:"Thơm" },
+  { img:"uploads/chala.jpg", name:"Chà Là" },
+  { img:"uploads/luu.jpg", name:"Lựu" },
+  { img:"uploads/manchile.jpg", name:"Mận Chi Lê" },
+  { img:"uploads/vietquoc.jpg", name:"Việt Quốc" },
+  { img:"uploads/xoai.jpg", name:"Xoài" },
 ];
-
 const container = document.getElementById("fruits");
-
 fruitImages.forEach(fruit => {
   const card = document.createElement("div");
   card.className = "card";
