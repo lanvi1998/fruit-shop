@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thực phẩm công nghệ</title>
+<style>
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f0f2f5;margin:0;}
+.header{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:white;padding:0 30px;height:100px;display:flex;align-items:center;gap:15px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+.header img{max-height:60px;border-radius:8px;}
+.header h1{font-size:22px;margin:0;}
+nav{background:#81c784;text-align:center;padding:12px;border-radius:10px;margin:10px;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+nav a{color:white;margin:0 20px;text-decoration:none;font-weight:bold;font-size:16px;}
+nav a:hover{color:#c8e6c9;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:25px;padding:20px;margin:0 20px;}
+.card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.15);display:flex;flex-direction:column;justify-content:space-between;}
+.card img{width:100%;height:180px;object-fit:cover;}
+.card-content{padding:10px;}
+.card h3{color:#2e7d32;margin:5px 0;}
+.card p{color:#555;margin:5px 0;}
+.card button{padding:10px;border:none;border-radius:8px;background:linear-gradient(135deg,#66bb6a,#2e7d32);color:white;cursor:pointer;width:100%;}
+.card button:hover{opacity:0.9;transform:scale(1.05);}
+#loginBtn{position:fixed;top:20px;right:20px;padding:12px 20px;background:#66bb6a;color:white;border:none;border-radius:12px;cursor:pointer;z-index:1000;}
+#authPopup{display:none;position:fixed;top:80px;right:20px;background:white;padding:25px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.3);width:280px;z-index:1001;}
+#authPopup h3{text-align:center;color:#2e7d32;margin-bottom:15px;}
+#authPopup input{width:100%;padding:8px;margin:8px 0;border-radius:8px;border:1px solid #ccc;}
+#authPopup button{width:48%;padding:8px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}
+#authPopup button:first-child{background:#2e7d32;color:white;margin-right:4%;}
+#authPopup button:last-child{background:#1976d2;color:white;}
+.admin{display:none;background:white;padding:20px;margin:20px auto;border-radius:15px;max-width:450px;box-shadow:0 5px 20px rgba(0,0,0,0.2);}
+.admin input,.admin select,.admin button{width:90%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;}
+.admin button{background:#2e7d32;color:white;border:none;cursor:pointer;}
+.admin button:hover{opacity:0.85;transform:scale(1.02);}
+footer{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:white;text-align:center;padding:20px;margin-top:30px;}
+</style>
+</head>
+<body>
+
+<button id="loginBtn">Login / Register</button>
+<div id="authPopup">
+<h3>Login / Register</h3>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<button onclick="register()">Register</button>
+</div>
+
+<header class="header">
+    <a href="index.html">
+      <img src="/logo.png" alt="Logo">
+      <h1>Trái cây nhập khẩu</h1>
+    </a>
+  </header>
+
+<nav>
+<a href="import.html">Trái cây nhập khẩu</a>
+<a href="local.html">Trái cây nội địa</a>
+<a href="cut.html">Trái cây cắt gọt</a>
+<a href="food.html">Thực phẩm công nghệ</a>
+<a href="gift.html">Giỏ quà tặng</a>
+<a href="box.html">Hộp quà tặng</a>
+</nav>
+
+<h2 style="text-align:center;margin-top:20px;">Thực phẩm công nghệ</h2>
+<div class="grid" id="product-grid"></div>
+
+<div class="admin">
+<h2>Admin Upload sản phẩm</h2>
+<input id="name" placeholder="Tên sản phẩm">
+<input id="price" placeholder="Giá">
+<select id="category">
+<option value="food" selected>Thực phẩm công nghệ</option>
+</select>
+<input type="file" id="image">
+<button onclick="addProduct()">Upload</button>
+</div>
+
+<footer>© 2026 Fruit Shop</footer>
+
+<script>
+let userRole=null;
+
+async function loadProducts(){
+  const res=await fetch("/api/fruits");
+  const data=await res.json();
+  const grid=document.getElementById("product-grid");
+  grid.innerHTML="";
+  data.filter(p=>p.category==="food").forEach(p=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <img src="${p.image}" alt="${p.name}">
+      <div class="card-content">
+        <h3>${p.name}</h3>
+        <p>${p.price.toLocaleString()} VND</p>
+        ${userRole==="admin"?`<button onclick="deleteProduct('${p._id}')">Xoá</button>`:`<button>Thêm vào giỏ</button>`}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById("loginBtn").addEventListener("click", ()=>{
+  const popup=document.getElementById("authPopup");
+  popup.style.display=popup.style.display==="none"?"block":"none";
+});
+
+async function login(){
+  const username=document.getElementById("username").value;
+  const password=document.getElementById("password").value;
+  const res=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username,password})});
+  const data=await res.json();
+  if(data.success){
+    userRole=data.role;
+    localStorage.setItem("username",username);
+    alert("Login thành công!");
+    document.getElementById("authPopup").style.display="none";
+    document.getElementById("loginBtn").style.display="none";
+    document.querySelector(".admin").style.display=(userRole==="admin")?"block":"none";
+    loadProducts();
+  }else alert(data.message);
+}
+
+function register(){ alert("Đăng ký demo, chỉ login admin mới có quyền"); }
+
+async function addProduct(){
+  const name=document.getElementById("name").value;
+  const price=document.getElementById("price").value;
+  const category=document.getElementById("category").value;
+  const fileInput=document.getElementById("image");
+  if(!name||!price||!fileInput.files.length){alert("Nhập đủ thông tin!");return;}
+  const formData=new FormData();
+  formData.append("name",name);
+  formData.append("price",price);
+  formData.append("category",category);
+  formData.append("username",localStorage.getItem("username"));
+  formData.append("image",fileInput.files[0]);
+  const res=await fetch("/api/upload",{method:"POST",body:formData});
+  const data=await res.json();
+  if(data.error){alert(data.error);return;}
+  loadProducts();
+  document.getElementById("name").value="";
+  document.getElementById("price").value="";
+  fileInput.value="";
+}
+
+async function deleteProduct(id){
+  const username=localStorage.getItem("username");
+  await fetch(`/api/fruits/${id}`,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({username})});
+  loadProducts();
+}
+
+loadProducts();
+</script>
+
+</body>
+</html>

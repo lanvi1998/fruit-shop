@@ -2,197 +2,310 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Fruit Shop - Trái Cây Nhập Khẩu</title>
+<title>Fruit Shop</title>
 <style>
-/* Reset cơ bản */
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: Arial, sans-serif; background:#f5f5f5; color:#333; line-height:1.5; }
-
-/* header full width */
+html { scroll-behavior: smooth; }
+body {
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  background:#f0f2f5;
+  margin:0;
+}
+/* HEADER */
 .header {
   background: linear-gradient(135deg,#2e7d32,#66bb6a);
   color:white;
-  padding:20px 50px;
+  padding:0 30px;
+  height:100px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  flex-wrap:wrap;
+  gap:15px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
-.left { display:flex; align-items:center; gap:20px; }
-.logo { height: 120px;0px; border-radius:10px; }
-.left h1 { font-size:28px; font-weight:bold; color:white; }
-.top-info { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
-.info { background: rgba(255,255,255,0.2); padding:6px 14px; border-radius:20px; font-size:14px; }
-.cart { background:#ffeb3b; color:black; padding:6px 14px; border-radius:20px; font-weight:bold; }
+.header a {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:white;
+}
+.header img.logo {
+  max-height:230px;
+  border-radius:8px;
+}
+.header h1 {
+  font-size:22px;
+  margin:0;
+}
 
-/* nav full width */
+/* NAVBAR */
 nav {
-  background:#66bb6a;
+  background:#81c784;
   text-align:center;
-  padding:12px 0;
+  padding:12px;
+  border-radius:10px;
+  margin:10px 20px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.2);
 }
 nav a {
   color:white;
+  margin:0 20px;
   text-decoration:none;
   font-weight:bold;
-  margin:0 20px;
   font-size:16px;
-  transition: color 0.3s;
+  transition:0.3s;
 }
-nav a:hover { color:#ffeb3b; }
+nav a:hover { color:#c8e6c9; transform:scale(1.05); }
 
-/* sections full width */
-.section {
-  width:100%;
-  padding:40px 50px;
-  background:#f5f5f5;
-}
-.title {
-  color:#2e7d32;
-  border-left:5px solid #2e7d32;
-  padding-left:12px;
-  margin-bottom:25px;
-  font-size:26px;
-}
-
-/* grid full width */
+/* PRODUCT GRID */
 .grid {
-  display:flex;
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
   gap:25px;
-  justify-content:flex-start;
+  padding:20px;
+  margin:0 20px;
 }
-
-/* card */
 .card {
   background:white;
-  flex:1 1 220px;
-  max-width:220px;
-  border-radius:12px;
-  border:2px solid #2e7d32;
-  padding:15px;
-  text-align:center;
-  box-shadow:0 3px 8px rgba(0,0,0,0.15);
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,0.15);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:0.3s;
 }
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow:0 8px 20px rgba(0,0,0,0.25);
-  border-color:#1b5e20;
+  transform:translateY(-8px) scale(1.03);
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
 }
 .card img {
   width:100%;
-  height:150px;
+  height:180px;
   object-fit:cover;
-  border-radius:10px;
-  margin-bottom:12px;
+  transition:0.3s;
 }
-.card h3 { font-size:18px; margin-bottom:10px; color:#2e7d32; }
+.card-content { padding:10px 12px; flex-grow:1; }
+.card h3 { font-size:18px; color:#2e7d32; margin:8px 0 5px 0; }
+.card p { font-size:16px; color:#555; margin:5px 0; }
 .card button {
-  background:#2e7d32;
-  color:white;
-  border:none;
-  padding:8px 14px;
-  cursor:pointer;
-  border-radius:6px;
-  font-size:14px;
-  transition: background 0.3s;
+  margin-top:10px; padding:10px; border:none; border-radius:8px;
+  cursor:pointer; font-weight:bold; background:linear-gradient(135deg,#66bb6a,#2e7d32);
+  color:white; width:100%; transition:0.3s;
 }
-.card button:hover { background:#1b5e20; }
+.card button:hover { opacity:0.9; transform:scale(1.05); }
 
-/* footer full width */
-footer {
-  width:100%;
-  background:#66bb6a;
-  color:white;
+/* ADMIN UPLOAD */
+.admin {
+  background:white;
+  padding:25px;
+  margin:40px auto;
   text-align:center;
-  padding:25px 50px;
-  font-size:14px;
+  border-radius:15px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.2);
+  max-width:450px;
+  display:none;
 }
-footer a { color:white; text-decoration:none; font-weight:bold; }
-footer a:hover { color:#ffeb3b; }
+.admin input, .admin select, .admin button {
+  width:90%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;
+}
+.admin button { background:#2e7d32; color:white; border:none; cursor:pointer; }
+.admin button:hover { opacity:0.85; transform:scale(1.02); }
 
-/* responsive */
-@media(max-width: 1200px){
-  .header, .section, footer { padding:20px; }
+/* LOGIN POPUP */
+#authPopup {
+  display:none;
+  position:fixed;
+  top:80px; right:20px; z-index:1001;
+  background:white; padding:25px; border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3); width:280px;
 }
-@media(max-width: 992px){
-  .grid { justify-content:center; }
+#authPopup h3 { text-align:center; margin-bottom:15px; color:#2e7d32; }
+#authPopup input { width:100%; padding:8px; margin:8px 0; border-radius:8px; border:1px solid #ccc; }
+#authPopup button {
+  width:48%; padding:8px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;
 }
-@media(max-width:768px){
-  .header { flex-direction:column; gap:15px; text-align:center; }
-  .top-info { justify-content:center; flex-wrap:wrap; gap:10px; }
-  .card { flex:1 1 45%; max-width:45%; }
+#authPopup button:first-child { background:#2e7d32; color:white; margin-right:4%; }
+#authPopup button:last-child { background:#1976d2; color:white; }
+
+/* LOGIN BUTTON */
+#loginBtn {
+  position:fixed; top:20px; right:20px; z-index:1000;
+  padding:12px 20px; background:#66bb6a; color:white; border:none; border-radius:12px; font-weight:bold;
+  cursor:pointer; transition:0.3s;
 }
-@media(max-width:480px){
-  .card { flex:1 1 100%; max-width:100%; }
-  nav a { display:block; margin:8px 0; }
+#loginBtn:hover { background:#4caf50; transform:scale(1.05); }
+
+/* FOOTER */
+footer {
+  background:linear-gradient(135deg,#2e7d32,#66bb6a);
+  color:white; text-align:center; padding:20px; border-top:3px solid #1b5e20;
+  font-size:14px; margin-top:30px; border-radius:15px 15px 0 0;
 }
 </style>
 </head>
 <body>
 
-<!-- header -->
-<header class="header">
-  <div class="left">
-    <img src="logo.png" class="logo" alt="Logo">
-    <h1>TRÁI CÂY NHẬP KHẨU</h1>
-  </div>
-  <div class="top-info">
-    <div class="info">📍 103 Lạc Long Quân, HN</div>
-    <div class="info">📞 0909xxx</div>
-    <div class="cart">🛒 0</div>
-  </div>
-</header>
+<!-- Login Button -->
+<button id="loginBtn">Login / Register</button>
 
-<!-- nav -->
-<nav>
-  <a href="#">Trang chủ</a>
-  <a href="#">Giới thiệu</a>
-  <a href="#">Sản phẩm</a>
-  <a href="#">Khuyến mãi</a>
-  <a href="#">Tin tức</a>
-</nav>
-
-<!-- section trái cây -->
-<div class="section">
-  <h2 class="title">Trái cây</h2>
-  <div class="grid" id="fruits"></div>
+<!-- Popup Login/Register -->
+<div id="authPopup">
+  <h3>Login / Register</h3>
+  <input id="username" placeholder="Username"><br>
+  <input id="password" type="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+  <button onclick="register()">Register</button>
 </div>
 
-<!-- footer -->
-<footer>
-  © 2026 Fruit Shop - <a href="#">Liên hệ</a>
-</footer>
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html">
+    <img src="/logo.png" class="logo" alt="Logo">
+    <h1>FRUIT SHOP</h1>
+  </a>
+</header>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="import.html">Trái cây nhập khẩu</a>
+  <a href="local.html">Trái cây nội địa</a>
+  <a href="cut.html">Trái cây cắt gọt</a>
+  <a href="food.html">Thực phẩm công nghệ</a>
+  <a href="gift.html">Giỏ quà tặng</a>
+  <a href="box.html">Hộp quà tặng</a>
+</nav>
+
+<!-- Product Grids -->
+<h2 style="text-align:center; margin-top:20px;">Sản phẩm</h2>
+<div id="import" class="grid"></div>
+<div id="local" class="grid"></div>
+<div id="cut" class="grid"></div>
+<div id="food" class="grid"></div>
+<div id="gift" class="grid"></div>
+<div id="box" class="grid"></div>
+
+<!-- Admin Upload -->
+<div class="admin">
+  <h2>Admin Upload sản phẩm</h2>
+  <input id="name" placeholder="Tên sản phẩm">
+  <input id="price" placeholder="Giá">
+  <select id="category">
+    <option value="import">Trái cây nhập khẩu</option>
+    <option value="local">Trái cây nội địa</option>
+    <option value="cut">Trái cây cắt gọt</option>
+    <option value="food">Thực phẩm công nghệ</option>
+    <option value="gift">Giỏ quà tặng</option>
+    <option value="box">Hộp quà tặng</option>
+  </select>
+  <input type="file" id="image">
+  <button onclick="addProduct()">Upload</button>
+</div>
+
+<!-- Footer -->
+<footer>© 2026 Fruit Shop</footer>
 
 <script>
-const fruitImages = [
-  { img:"uploads/tao.jpg", name:"Táo" },
-  { img:"uploads/cam.jpg", name:"Cam" },
-  { img:"uploads/cherry.jpg", name:"Cherry" },
-  { img:"uploads/dao.jpg", name:"Đào" },
-  { img:"uploads/dau.jpg", name:"Dâu" },
-  { img:"uploads/dualuoi.jpg", name:"Dưa Lưới" },
-  { img:"uploads/kiwi.jpg", name:"Kiwi" },
-  { img:"uploads/nho.jpg", name:"Nho" },
-  { img:"uploads/thom.jpg", name:"Thơm" },
-  { img:"uploads/chala.jpg", name:"Chà Là" },
-  { img:"uploads/luu.jpg", name:"Lựu" },
-  { img:"uploads/manchile.jpg", name:"Mận Chi Lê" },
-  { img:"uploads/vietquoc.jpg", name:"Việt Quốc" },
-  { img:"uploads/xoai.jpg", name:"Xoài" },
-];
-const container = document.getElementById("fruits");
-fruitImages.forEach(fruit => {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = `
-    <img src="${fruit.img}" alt="${fruit.name}">
-    <h3>${fruit.name}</h3>
-    <button onclick="alert('Liên hệ: 0909xxx')">Liên hệ</button>
-  `;
-  container.appendChild(card);
+let userRole = null;
+
+// Login popup toggle
+document.getElementById("loginBtn").addEventListener("click", ()=>{
+  const popup = document.getElementById("authPopup");
+  popup.style.display = popup.style.display==="none" ? "block" : "none";
 });
+
+// Load products
+function loadProducts(){
+  fetch("/api/fruits")
+  .then(res=>res.json())
+  .then(products=>{
+    const categories = ["import","local","cut","food","gift","box"];
+    categories.forEach(c => {
+      const div = document.getElementById(c);
+      if(div) div.innerHTML="";
+    });
+    products.forEach(p=>{
+      const card = document.createElement("div");
+      card.className="card";
+      card.innerHTML=`
+        <img src="${p.image}" alt="${p.name}">
+        <div class="card-content">
+          <h3>${p.name}</h3>
+          <p>${p.price.toLocaleString()} VND</p>
+          ${userRole==="admin"?`<button onclick="deleteProduct('${p._id}')">Xoá</button>`:`<button>Thêm vào giỏ</button>`}
+        </div>
+      `;
+      const gridDiv = document.getElementById(p.category.toLowerCase());
+      if(gridDiv) gridDiv.appendChild(card);
+    });
+  });
+}
+
+// Login
+function login(){
+  const username=document.getElementById("username").value;
+  const password=document.getElementById("password").value;
+  fetch("/api/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({username,password})
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      userRole=data.role;
+      localStorage.setItem("username", username);
+      alert("Login thành công!");
+      document.getElementById("authPopup").style.display="none";
+      document.getElementById("loginBtn").style.display="none";
+      if(userRole==="admin") document.querySelector(".admin").style.display="block";
+      loadProducts();
+    } else alert(data.message);
+  });
+}
+
+// Register
+function register(){
+  alert("Demo đăng ký: chỉ login admin mới có quyền upload.");
+}
+
+// Add product
+function addProduct(){
+  const name=document.getElementById("name").value;
+  const price=document.getElementById("price").value;
+  const category=document.getElementById("category").value;
+  const image=document.getElementById("image").files[0];
+  if(!name||!price||!image){ alert("Nhập đủ thông tin!"); return; }
+  const formData=new FormData();
+  formData.append("name",name);
+  formData.append("price",price);
+  formData.append("category",category);
+  formData.append("image",image);
+  formData.append("username",localStorage.getItem("username"));
+  fetch("/api/upload",{method:"POST",body:formData})
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.error){ alert(data.error); return; }
+    alert("Upload thành công");
+    document.getElementById("name").value="";
+    document.getElementById("price").value="";
+    document.getElementById("image").value="";
+    loadProducts();
+  });
+}
+
+// Delete product
+function deleteProduct(id){
+  fetch("/api/fruits/"+id,{
+    method:"DELETE",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({username: localStorage.getItem("username")})
+  })
+  .then(res=>res.json())
+  .then(()=>loadProducts());
+}
+
+// Initial load
+loadProducts();
 </script>
 
 </body>
