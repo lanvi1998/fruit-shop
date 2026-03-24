@@ -354,32 +354,105 @@ body {
   background-color: #66bb6a; /* xanh nhạt giống màu header */
   color: white;              /* chữ trắng nổi bật khi hover */
 }
-  /* ===== MOBILE ===== */
-  @media (max-width:768px){
-    .header{
-      height:70px;
-      padding:0 15px;
-    }
-    .header img{
-      width:120px;
-      height:120px;
-    }
-    .header h1{
-      font-size:18px;
-    }
-    .grid{
-      grid-template-columns:repeat(2,1fr);
-      gap:12px;
-      padding:10px;
-    }
-    .card img{
-      height:140px;
-    }
-    .banner-slider img {
-      height:200px;
-    }
-    .admin{
-      display:none;
-    }
-    
+ /* ===== MOBILE ===== */
+@media (max-width:768px){
+  .header{
+    height:80px; /* cao hơn 1 chút để logo + search thoải mái */
+    padding:0 15px;
+    flex-direction: column; /* xếp dọc nếu cần */
+    align-items: flex-start;
+    gap:8px;
   }
+  .header-left {
+    width:100%;
+    gap:8px;
+  }
+  .header img{
+    width:100px;
+    height:100px;
+  }
+  .header h1{
+    font-size:18px;
+  }
+  #searchInput {
+    font-size:16px;      /* dễ nhìn hơn */
+    min-width:0;
+    flex:1;
+    padding:10px;
+  }
+  #searchBtn {
+    padding:10px 16px;   /* dễ chạm hơn */
+    font-size:16px;
+  }
+
+  /* GRID & CARD */
+  .grid{
+    grid-template-columns:1fr; /* 1 cột để dễ đọc */
+    gap:15px;
+    padding:10px;
+  }
+  .card img{
+    height:180px;
+  }
+  .card-content h3{
+    font-size:18px;
+  }
+  .card-content button{
+    padding:12px;
+    font-size:16px;  /* dễ bấm hơn */
+  }
+
+  /* BANNER */
+  .banner-slider img{
+    height:220px;
+  }
+  #bannerDots span{
+    width:14px;
+    height:14px;
+  }
+
+  /* LOGIN POPUP */
+  #authPopup{
+    width:90%;
+    padding:20px;
+  }
+  #authPopup input{
+    padding:10px;
+    font-size:16px;
+  }
+  #authPopup button{
+    width:48%;
+    padding:12px;
+    font-size:16px;
+  }
+
+  /* NAVBAR */
+  nav{
+    flex-direction:column;
+    gap:10px;
+  }
+  nav a{
+    font-size:16px;
+    padding:10px 16px;
+  }
+
+  /* SEARCH BOX */
+  .search-box input{
+    font-size:16px;
+    padding:10px 12px;
+    width:100%;
+  }
+  .search-box button{
+    padding:10px 14px;
+    font-size:16px;
+  }
+
+  /* ADMIN */
+  .admin input,
+  .admin select,
+  .admin button{
+    width:95%;
+    padding:12px;
+    font-size:16px;
+  }
+}
