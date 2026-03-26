@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Giỏ quà tặng</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -26,7 +27,10 @@
     <div id="searchResults"></div>
   </div>
   <div class="header-right">
-    <a href="cart.html" class="cart">🛒 Giỏ (<span id="cartCount">0</span>)</a>
+    <a href="cart.html" class="cart-icon">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span id="cartCount" class="cart-count">0</span>
+      </a>
   </div>
 </header>
 
@@ -56,16 +60,57 @@
   <button id="uploadProductBtn">Upload</button>
 </div>
 
-<!-- CONTACT -->
-<section style="background:#f5f5f5; padding:20px; text-align:center; margin-top:40px;">
-  <p>📍 103 Lạc Long Quân</p>
-  <p>📞 0909xxx</p>
-  <p>Zalo: 0909xxx | Facebook: <a href="#" target="_blank">https://www.facebook.com</a></p>
-</section>
-
 <!-- FOOTER -->
-<footer>© 2026 Fruit Shop</footer>
+<footer class="footer">
+  <div class="footer-container">
 
+    <div class="footer-col">
+      <h3>Thông tin công ty</h3>
+      <p>CÔNG TY TRÁI CÂY</p>
+      <p>Địa chỉ: 103 Lạc Long Quân, Phường Minh Phụng, TPHCM
+
+      </p>
+      <p>Hotline: 0905276510</p>
+      <p>Email: fruitshop@gmail.com</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Chính sách và dịch vụ</h3>
+      <p>Đổi trả 48h</p>
+      <p>Chính sách khách hàng</p>
+      <p>Bảo mật thông tin</p>
+      <p>Hướng dẫn mua hàng</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Kênh liên hệ</h3>
+    
+      <div class="social">
+    
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/co.ut.trai.cay.2025/" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
+        </a>
+    
+        <!-- Zalo -->
+        <a href="https://zalo.me/0905276510" target="_blank">
+          <img src="zalo.jpg">
+        </a>
+    
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@uphan6510" target="_blank">
+          <img src="tiktok.jpg">
+        </a>
+    
+      </div>
+    </div>
+
+  </div>
+  <div class="footer-bottom">
+    <p> 📞 Hotline: 0905276510<p>
+    <p> 📍 Địa chỉ : 103 Lạc Long Quân, Phường Minh Phụng, TPHCM</p> 
+  </div>
+</footer>
 <!-- Nút login/logout -->
 <div id="loginWrapper" style="position:fixed; bottom:10px; left:10px; z-index:1000;">
   <button id="loginBtn">Login</button>
@@ -249,7 +294,15 @@ function renderResults(products){
   if(products.length===0){ searchResults.style.display="none"; return; }
   products.forEach((p,i)=>{
     const div = document.createElement("div");
-    div.innerHTML = `<strong>${p.name}</strong><br><small>${Number(p.price).toLocaleString()} VND</small>`;
+    div.innerHTML = `
+  <div style="display:flex; align-items:center; gap:8px;">
+    <img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
+    <div>
+      <strong>${p.name}</strong><br>
+      <small>${Number(p.price).toLocaleString()} VND</small>
+    </div>
+  </div>
+`;
     div.dataset.index = i;
     div.addEventListener("click",()=> window.location.href=`/search.html?q=${encodeURIComponent(p.name)}`);
     searchResults.appendChild(div);

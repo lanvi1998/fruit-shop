@@ -4,9 +4,12 @@
 <meta charset="UTF-8">
 <title>Fruit Shop</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 </head>
 <body>
+
 
 <!-- Popup Login -->
 <div id="authPopup">
@@ -31,7 +34,10 @@
   </div>
   <div class="header-right">
     
-    <a href="cart.html" class="cart">🛒 Giỏ (<span id="cartCount">0</span>)</a>
+    <a href="cart.html" class="cart-icon">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span id="cartCount" class="cart-count">0</span>
+      </a>
   </div>
 </header>
 
@@ -70,18 +76,60 @@
   <button id="uploadBannerBtn">Upload Banner</button>
 </div>
 
-<!-- CONTACT -->
-<section style="background:#f5f5f5; padding:20px; text-align:center; margin-top:40px;">
-  <p>📍 103 Lạc Long Quân</p>
-  <p>📞 0909xxx</p>
-  <p>Zalo: 0909xxx | Facebook: <a href="#" target="_blank">https://www.facebook.com</a></p>
-</section>
-
-<!-- Thêm container để show kết quả autocomplete -->
-
 
 <!-- FOOTER -->
-<footer>© 2026 Fruit Shop</footer>
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-col">
+      <h3>Thông tin công ty</h3>
+      <p>CÔNG TY TRÁI CÂY</p>
+      <p>Địa chỉ: 103 Lạc Long Quân, Phường Minh Phụng, TPHCM
+
+      </p>
+      <p>Hotline: 0905276510</p>
+      <p>Email: fruitshop@gmail.com</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Chính sách và dịch vụ</h3>
+      <p>Đổi trả 48h</p>
+      <p>Chính sách khách hàng</p>
+      <p>Bảo mật thông tin</p>
+      <p>Hướng dẫn mua hàng</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Kênh liên hệ</h3>
+    
+      <div class="social">
+    
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/co.ut.trai.cay.2025/" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
+        </a>
+    
+        <!-- Zalo -->
+        <a href="https://zalo.me/0905276510" target="_blank">
+          <img src="zalo.jpg">
+        </a>
+    
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@uphan6510" target="_blank">
+          <img src="tiktok.jpg">
+        </a>
+    
+      </div>
+    </div>
+
+  </div>
+  <div class="footer-bottom">
+    <p> 📞 Hotline: 0905276510<p>
+    <p> 📍 Địa chỉ : 103 Lạc Long Quân, Phường Minh Phụng, TPHCM</p> 
+  </div>
+</footer>
+<!-- <footer>© 2026 Fruit Shop</footer> -->
+
 <button id="loginBtn">Login</button>
   <button id="logoutBtn" style="display:none;">Logout</button>
 
@@ -386,13 +434,17 @@ function renderResults(products){
   products.forEach((p,i)=>{
 
     const div=document.createElement("div");
-
+//ảnh
     div.innerHTML = `
-      <strong>${p.name}</strong>
-      <br>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
+    <div>
+      <strong>${p.name}</strong><br>
       <small>${Number(p.price).toLocaleString()} VND</small>
-    `;
-
+    </div>
+  </div>
+`;
+//ảnh
     div.dataset.index=i;
 
     div.addEventListener("click",()=>{
@@ -519,7 +571,7 @@ updateCartCount(); loadProducts(); loadBanners();
   right: 20px;
   width: 60px;
   height: 60px;
-  border-radius: 50%;
+  border-radius:6
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   z-index: 9999;
@@ -552,22 +604,34 @@ updateCartCount(); loadProducts(); loadBanners();
 
 <script>
 // Chạy khi DOM load xong
-document.addEventListener("DOMContentLoaded", ()=>{
-  const floatingBtn = document.getElementById("floatingBtn");
-  const contactPopup = document.getElementById("contactPopup");
+const floatingBtn = document.getElementById("floatingBtn");
+const contactPopup = document.getElementById("contactPopup");
 
-  floatingBtn.addEventListener("click", (e)=>{
-    e.stopPropagation(); // ngăn click ra ngoài ẩn popup ngay
-    contactPopup.style.display = (contactPopup.style.display==="flex") ? "none" : "flex";
-  });
+// mở / đóng popup
+floatingBtn.addEventListener("click",(e)=>{
+  e.stopPropagation();
 
-  // Ẩn popup khi click ngoài
-  document.addEventListener("click",(e)=>{
-    if(!contactPopup.contains(e.target) && e.target !== floatingBtn){
-      contactPopup.style.display = "none";
-    }
-  });
+  if(contactPopup.style.display==="flex"){
+    contactPopup.style.display="none";
+  }else{
+    contactPopup.style.display="flex";
+  }
 });
+
+// click ra ngoài -> đóng
+document.addEventListener("click",()=>{
+  contactPopup.style.display="none";
+});
+
+// click trong popup không đóng
+contactPopup.addEventListener("click",(e)=>{
+  e.stopPropagation();
+});
+
+
+
+</script>
+
 </script>
 </html> 
 </body>

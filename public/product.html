@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Chi tiết sản phẩm</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 
@@ -158,12 +159,14 @@ cursor:pointer;
 #cartAlert{
 position:fixed;
 top:20px;
-right:20px;
+left:50%;
+transform:translateX(-50%);
 background:#145b1e;
 color:white;
 padding:10px 20px;
 border-radius:6px;
 display:none;
+z-index:9999;
 }
 .search-box{
   position:relative;
@@ -187,10 +190,10 @@ display:none;
 
 /* ô tìm kiếm */
 #searchInput{
-  width:300px;
-  padding:8px 12px;
+  width:700px;
+  padding:10px 20px;
   border-radius:6px;
-  border:1px solid #ccc;
+  border:1px solid #08701d;
 }
 
 /* popup search */
@@ -198,13 +201,13 @@ display:none;
   position:absolute;
   top:100%;
   left:0;
-  width:300px;
+  width:700px;
 
-  background:white;
+  background:#e6eeea;
   border:1px solid #ddd;
   border-radius:6px;
 
-  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  box-shadow:0 4px 10px rgba(248, 250, 248, 0.15);
 
   max-height:250px;
   overflow-y:auto;
@@ -240,22 +243,23 @@ display:none;
 <!-- HEADER -->
 <header class="header">
 
-<div class="header-left">
-
-<a href="index.html">
-<img src="/logo.png" class="logo">
-</a>
-<input type="text" id="searchInput" placeholder="Tìm sản phẩm...">
-<div id="searchResults"></div>
-
-</div>
+  <div class="header-left" style="display:flex; align-items:center; gap:10px;">
+    <a href="index.html">
+      <img src="/logo.png" class="logo">
+    </a>
+  
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Tìm sản phẩm...">
+      <div id="searchResults"></div>
+    </div>
+  </div>
 
 <div class="header-right">
 
-<a href="cart.html" class="cart">
-🛒 Giỏ (<span id="cartCount">0</span>)
-</a>
-
+  <a href="cart.html" class="cart-icon">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span id="cartCount" class="cart-count">0</span>
+    </a>
 </div>
 
 </header>
@@ -837,9 +841,14 @@ result.slice(0,5).forEach(p=>{
 const div = document.createElement("div")
 
 div.innerHTML = `
-${p.name} <br>
-${Number(p.price).toLocaleString()} VND
-`
+  <div style="display:flex; align-items:center; gap:8px;">
+    <img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
+    <div>
+      <strong>${p.name}</strong><br>
+      <small>${Number(p.price).toLocaleString()} VND</small>
+    </div>
+  </div>
+`;
 
 div.onclick = ()=>{
 window.location.href="product.html?id="+p._id
