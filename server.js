@@ -158,9 +158,12 @@ app.post("/api/banner/upload", upload.single("image"), async (req,res)=>{
     if(!user || user.role !== "admin") return res.status(403).json({error:"Chỉ admin mới được phép"})
     if(!req.file) return res.status(400).json({error:"Chưa chọn ảnh"})
 
-    const banner = new Banner({
-      image: "/uploads/"+req.file.filename
-    })
+      const protocol = req.protocol
+      const host = req.get("host")
+      
+      const banner = new Banner({
+        image: `${protocol}://${host}/uploads/${req.file.filename}`
+      })
     await banner.save()
     res.json({success:true, banner})
   }catch(err){
@@ -360,8 +363,10 @@ app.post("/api/fruits/:id/thumb", upload.single("thumb"), async (req,res)=>{
     if(!req.file) return res.status(400).json({success:false,message:"Chưa chọn file"});
 
     if(!fruit.thumbs) fruit.thumbs=[];
-    const thumbPath = "/uploads/" + req.file.filename;
-    fruit.thumbs.push(thumbPath);
+    const protocol = req.protocol;
+const host = req.get("host");
+const thumbPath = `${protocol}://${host}/uploads/${req.file.filename}`;
+fruit.thumbs.push(thumbPath);
     await fruit.save();
 
     // Trả về product đã update để front-end hiển thị ngay

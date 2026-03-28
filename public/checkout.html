@@ -88,79 +88,105 @@ form button:hover { background:#0d4014; }
 <footer>© 2026 Fruit Shop | 103 Lạc Long Quân | 0909xxx</footer>
 
 <script>
-// URL server
-const API_URL = "http://localhost:3000"; // thay bằng server của bạn
+// ===== CẤU HÌNH =====
+const API_URL = "http://localhost:3000"; // Thay server của bạn
+const summary = document.getElementById("cart-summary");
+const urlParams = new URLSearchParams(window.location.search);
+const isBuyNow = urlParams.get("buyNow");
 
-// Lấy giỏ hàng
-function getCart() { return JSON.parse(localStorage.getItem("cart")) || []; }
-
-// Hiển thị giỏ hàng
-function renderCartSummary() {
-  const cart = getCart();
-  const summary = document.getElementById("cart-summary");
-  summary.innerHTML="";
-  if(cart.length===0){ summary.innerHTML="<p>Giỏ hàng trống!</p>"; return; }
-
-  let total=0;
-  cart.forEach(p=>{
-    const itemTotal=p.price*p.qty;
-    total+=itemTotal;
-    const div=document.createElement("div");
-    div.className="cart-item";
-    div.innerHTML=`<img src="${p.image}" alt="${p.name}">
-      <div class="cart-info">
-        <p>${p.name} x ${p.qty}</p>
-        <p>Thành tiền: ${itemTotal.toLocaleString()} VND</p>
-      </div>`;
-    summary.appendChild(div);
-  });
-  const totalDiv=document.createElement("div");
-  totalDiv.className="total-price";
-  totalDiv.innerText="Tổng tiền: "+total.toLocaleString()+" VND";
-  summary.appendChild(totalDiv);
+// ===== HÀM LẤY GIỎ HÀNG =====
+function getCart() {
+    return JSON.parse(localStorage.getItem("cart") || "[]");
 }
 
-// Submit form
+// ===== LOAD GIỎ HÀNG HOẶC MUA NGAY =====
+let orders = [];
+
+if(isBuyNow){
+    const buyNowOrder = JSON.parse(localStorage.getItem("buyNowOrder") || "{}");
+    if(buyNowOrder.id) orders.push(buyNowOrder);
+}else{
+    orders = getCart();
+}
+
+// ===== HIỂN THỊ GIỎ HÀNG =====
+function renderCartSummary() {
+    summary.innerHTML = "";
+    if(orders.length === 0){
+        summary.innerHTML = "<p>Giỏ hàng trống!</p>";
+        return;
+    }
+
+    let total = 0;
+    orders.forEach(p => {
+        const itemTotal = p.price * p.qty;
+        total += itemTotal;
+
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+            <img src="${p.image}" alt="${p.name}">
+            <div class="cart-info">
+                <p>${p.name} x ${p.qty}</p>
+                <p>Thành tiền: ${itemTotal.toLocaleString()} VND</p>
+            </div>
+        `;
+        summary.appendChild(div);
+    });
+
+    const totalDiv = document.createElement("div");
+    totalDiv.className = "total-price";
+    totalDiv.innerText = "Tổng tiền: " + total.toLocaleString() + " VND";
+    summary.appendChild(totalDiv);
+
+    // Xóa order tạm nếu mua ngay
+    if(isBuyNow) localStorage.removeItem("buyNowOrder");
+}
+
+renderCartSummary();
+
+// ===== XỬ LÝ SUBMIT FORM =====
 const form = document.getElementById("checkout-form");
 const submitBtn = form.querySelector("button");
 
 form.addEventListener("submit", function(e){
-  e.preventDefault();
+    e.preventDefault();
 
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const address = document.getElementById("address").value.trim();
-  const cart = getCart();
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const address = document.getElementById("address").value.trim();
 
-  if(cart.length===0){ alert("Giỏ hàng trống!"); return; }
-  if(!name||!phone||!email||!address){ alert("Vui lòng điền đầy đủ thông tin"); return; }
+    if(orders.length === 0){ alert("Giỏ hàng trống!"); return; }
+    if(!name || !phone || !email || !address){ alert("Vui lòng điền đầy đủ thông tin"); return; }
 
-  let total=0; cart.forEach(p=>total+=p.price*p.qty);
+    let total = 0;
+    orders.forEach(p => total += p.price * p.qty);
 
-  // 1️⃣ khóa nút và đổi text
-  submitBtn.disabled = true;
-  submitBtn.innerText = "Đang xử lý...";
+    // khóa nút
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Đang xử lý...";
 
-  // 2️⃣ lưu localStorage để confirm.html đọc
-  localStorage.setItem("lastOrder", JSON.stringify({name,phone,email,address,total,cart}));
-  localStorage.removeItem("cart");
+    // lưu localStorage cho confirm.html
+    localStorage.setItem("lastOrder", JSON.stringify({
+        name, phone, email, address, total, cart: orders
+    }));
 
-  // 3️⃣ redirect ngay
-  window.location.href="confirm.html";
+    if(!isBuyNow) localStorage.removeItem("cart");
 
-  // 4️⃣ gửi order async background
-  fetch(`${API_URL}/api/order`, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({name,phone,email,address,total,cart})
-  })
-  .then(res=>res.json())
-  .then(data=>console.log("Order gửi server:", data))
-  .catch(err=>console.error("Gửi order lỗi:", err));
+    // redirect ngay
+    window.location.href = "confirm.html";
+
+    // gửi server async
+    fetch(`${API_URL}/api/order`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({name, phone, email, address, total, cart: orders})
+    })
+    .then(res => res.json())
+    .then(data => console.log("Order gửi server:", data))
+    .catch(err => console.error("Gửi order lỗi:", err));
 });
-
-renderCartSummary();
 </script>
 
 </body>
