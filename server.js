@@ -2,8 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
 const multer = require("multer")
-const path = require("path")
-const fs = require("fs")
+
 const nodemailer = require("nodemailer") // Thêm nodemailer
 
 const app = express()
@@ -11,7 +10,16 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static("public"))
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")))
+
+
+// config Cloudinary
+const cloudinary = require("cloudinary").v2
+const { CloudinaryStorage } = require("multer-storage-cloudinary")
+cloudinary.config({
+  cloud_name: "dnrillagh",
+  api_key: "984556969348289",
+  api_secret: "bSt9Rx9JP80MvUTNpTyBhtZGotg"
+})
 
 // ===== MongoDB =====
 mongoose.connect("mongodb://lanvi:lanvi98@ac-yeq62ge-shard-00-00.lxr0whp.mongodb.net:27017,ac-yeq62ge-shard-00-01.lxr0whp.mongodb.net:27017,ac-yeq62ge-shard-00-02.lxr0whp.mongodb.net:27017/fruitshop?ssl=true&replicaSet=atlas-8oee57-shard-0&authSource=admin&retryWrites=true&w=majority")
@@ -57,15 +65,16 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model("Order", orderSchema)
 
 
-// ===== Tạo folder uploads nếu chưa có =====
-const uploadPath = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
+
 
 // ===== Multer config =====
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadPath),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "fruitshop",
+    allowed_formats: ["jpg","png","jpeg","webp"]
+  }
+})
 const upload = multer({ storage });
 // ===== GET tất cả sản phẩm =====
 app.get("/api/fruits", async (req,res)=>{
@@ -86,8 +95,7 @@ app.delete("/api/fruits/:id", async (req,res)=>{
 
     const fruit = await Fruit.findById(req.params.id)
     if(!fruit) return res.status(404).json({error:"Not found"})
-      const imagePath = path.join(__dirname, "uploads", path.basename(fruit.image));
-    if(fs.existsSync(imagePath)) fs.unlinkSync(imagePath)
+     
     await Fruit.findByIdAndDelete(req.params.id)
     res.json({message:"Deleted"})
   }catch(err){
@@ -103,9 +111,7 @@ app.post("/api/upload", upload.single("image"), async (req,res)=>{
     if(!user || user.role!=="admin") return res.status(403).json({error:"Chỉ admin mới được phép"});
     if(!req.file) return res.status(400).json({error:"Chưa chọn ảnh"});
 
-    // Lấy URL đầy đủ
-    const protocol = req.protocol; // http hoặc https
-    const host = req.get('host');  // localhost:3000 hoặc domain
+    
 
     const fruit = new Fruit({
       name,
@@ -113,7 +119,7 @@ app.post("/api/upload", upload.single("image"), async (req,res)=>{
       unit,
       category: category.toLowerCase(),
       description,
-      image: `${protocol}://${host}/uploads/${req.file.filename}` // ✅ URL đầy đủ
+      image: req.file.path
     });
 
     await fruit.save();
@@ -162,7 +168,7 @@ app.post("/api/banner/upload", upload.single("image"), async (req,res)=>{
       const host = req.get("host")
       
       const banner = new Banner({
-        image: `${protocol}://${host}/uploads/${req.file.filename}`
+        image: req.file.path
       })
     await banner.save()
     res.json({success:true, banner})
@@ -186,8 +192,7 @@ app.delete("/api/banner/:id", async (req,res)=>{
     const { id } = req.params
     const banner = await Banner.findById(id)
     if(!banner) return res.status(404).json({error:"Not found"})
-    const imagePath = path.join(__dirname, banner.image)
-    if(fs.existsSync(imagePath)) fs.unlinkSync(imagePath)
+     
     await Banner.findByIdAndDelete(id)
     res.json({success:true})
   }catch(err){
@@ -218,7 +223,7 @@ let cartHtml = `
   </thead>
   <tbody>
     ${cart.map(p => {
-      const imageUrl = p.image ? `https://coutsaigon.onrender.com${p.image}` : "https://via.placeholder.com/60";
+      const imageUrl = p.image || "https://via.placeholder.com/60";
       return `
         <tr>
         <td><img src="${imageUrl}" width="60"></td>
@@ -350,71 +355,67 @@ app.put("/api/fruits/:id/description", async (req, res) => {
 });
 // Express route ví dụ:
 // Express route upload thumbnail (server.js)
+// ===== UPLOAD THUMB =====
 app.post("/api/fruits/:id/thumb", upload.single("thumb"), async (req,res)=>{
   try{
     const { username } = req.body;
+
     const user = await User.findOne({ username });
-    if(!user || user.role !== "admin") 
+    if(!user || user.role !== "admin")
       return res.status(403).json({success:false,message:"Chỉ admin"});
 
     const fruit = await Fruit.findById(req.params.id);
-    if(!fruit) return res.status(404).json({success:false,message:"Không tìm thấy sản phẩm"});
+    if(!fruit)
+      return res.status(404).json({success:false,message:"Không tìm thấy sản phẩm"});
 
-    if(!req.file) return res.status(400).json({success:false,message:"Chưa chọn file"});
+    if(!req.file)
+      return res.status(400).json({success:false,message:"Chưa chọn file"});
 
-    if(!fruit.thumbs) fruit.thumbs=[];
-    const protocol = req.protocol;
-const host = req.get("host");
-const thumbPath = `${protocol}://${host}/uploads/${req.file.filename}`;
-fruit.thumbs.push(thumbPath);
+    if(!fruit.thumbs) fruit.thumbs = [];
+
+    fruit.thumbs.push(req.file.path);
+
     await fruit.save();
 
-    // Trả về product đã update để front-end hiển thị ngay
     res.json({success:true, product: fruit});
-  }catch(err){ 
-    console.error(err); 
-    res.status(500).json({success:false,message:err.message}); 
+
+  }catch(err){
+    console.error(err);
+    res.status(500).json({success:false,message:err.message});
   }
-}); 
+});
 
 
 // ===== Run server =====
 const PORT = 3000
 app.listen(PORT,()=>console.log("Server running on http://localhost:"+PORT))
 // ===== DELETE THUMB =====
+// ===== DELETE THUMB =====
 app.delete("/api/fruits/:id/thumb", async (req,res)=>{
-
   try{
-  
-  const {username,image} = req.body
-  
-  if(username!=="admin"){
-  return res.status(403).json({message:"Chỉ admin mới được xoá"})
-  }
-  
-  const fruit = await Fruit.findById(req.params.id)
-  
-  if(!fruit) return res.status(404).json({message:"Không tìm thấy sản phẩm"})
-  
-  // xoá khỏi database
-  fruit.thumbs = fruit.thumbs.filter(t=>t!==image)
-  
-  await fruit.save()
-  
-  // xoá file vật lý
-  const filePath = path.join(__dirname, "uploads", path.basename(image));
-  
-  if(fs.existsSync(filePath)){
-  fs.unlinkSync(filePath)
-  }
-  
-  res.json({success:true})
-  
+
+    const { username, image } = req.body;
+
+    const user = await User.findOne({ username });
+
+    if(!user || user.role !== "admin"){
+      return res.status(403).json({message:"Chỉ admin"});
+    }
+
+    const fruit = await Fruit.findById(req.params.id);
+
+    if(!fruit)
+      return res.status(404).json({message:"Không tìm thấy sản phẩm"});
+
+    // xoá khỏi database
+    fruit.thumbs = fruit.thumbs.filter(t => t !== image);
+
+    await fruit.save();
+
+    res.json({success:true});
+
   }catch(err){
-  
-  console.error(err)
-  res.status(500).json({message:"Lỗi xoá ảnh"})
-  
+    console.error(err);
+    res.status(500).json({message:"Lỗi xoá ảnh"});
   }
-  
-  })
+});

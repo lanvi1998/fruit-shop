@@ -2,10 +2,11 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chi tiết sản phẩm</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 
 /* PRODUCT */
@@ -592,7 +593,34 @@ loadProduct().then(()=>{
 // --- Thêm hàm enableSwipeThumbs() ở đây ---
 function enableSwipeThumbs() {
     const thumbContainer = document.getElementById("thumbContainer");
-    const mainImage = document.getElementById("mainImage");
+    thumbContainer.innerHTML = "";
+    if (p.thumbs && p.thumbs.length) {
+    p.thumbs.forEach(url => {
+        const div = document.createElement("div");
+        const img = document.createElement("img");
+        img.src = url;
+
+        img.onclick = () => {
+            document.getElementById("mainImage").src = img.src;
+            thumbContainer.querySelectorAll("img").forEach(t => t.classList.remove("selected"));
+            img.classList.add("selected");
+        };
+
+        // nếu admin thì thêm nút xoá
+        if(userRole === "admin"){
+            const del = document.createElement("span");
+            del.innerText = "❌";
+            del.onclick = () => deleteThumb(img.src, div);
+            div.appendChild(del);
+        }
+
+        div.appendChild(img);
+        thumbContainer.appendChild(div);
+    });
+
+    // chọn thumbnail đầu tiên mặc định
+    thumbContainer.querySelector("img")?.classList.add("selected");
+}
 
     let isDown = false;
     let startX;
