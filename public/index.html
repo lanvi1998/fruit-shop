@@ -54,7 +54,9 @@
 
 <!-- BANNER SLIDER -->
 <div class="banner-slider" id="bannerSlider">
+  <button class="prev">❮</button>
   <div class="slides"></div>
+  <button class="next">❯</button>
 </div>
 <div id="bannerDots"></div>
 
@@ -264,26 +266,32 @@ async function loadBanners(){
     slidesContainer.innerHTML="";
     dotsWrapper.innerHTML="";
     banners.forEach((b,i)=>{
-      const img = document.createElement("img");
-      img.src=b.image;
-      slidesContainer.appendChild(img);
-      if(userRole==="admin"){
-        const btn = document.createElement("button");
-        btn.innerText="❌";
-        btn.style.position="absolute";
-        btn.style.top="10px";
-        btn.style.right="10px";
-        btn.onclick=()=> deleteBanner(b._id);
-        slidesContainer.appendChild(btn);
-      }
-      const dot = document.createElement("span");
-      if(i===0) dot.classList.add("active");
-      dot.addEventListener("click", ()=>{
-        goToSlide(i);
-        resetInterval();
-      });
-      dotsWrapper.appendChild(dot);
-    });
+  const slide = document.createElement("div");
+  slide.style.position = "relative"; // để nút nằm đúng trên ảnh
+
+  const img = document.createElement("img");
+  img.src = b.image;
+  slide.appendChild(img);
+
+  if(userRole === "admin"){
+    const btn = document.createElement("button");
+    btn.innerText = "❌";
+    btn.style.position = "absolute";
+    btn.style.top = "10px";
+    btn.style.right = "10px";
+    btn.style.zIndex = "10";
+    btn.onclick = () => deleteBanner(b._id);
+    slide.appendChild(btn); // <-- append vào slide, không phải slidesContainer
+  }
+
+  slidesContainer.appendChild(slide);
+
+  // tạo dot
+  const dot = document.createElement("span");
+  if(i === 0) dot.classList.add("active");
+  dot.addEventListener("click", ()=>{ goToSlide(i); resetInterval(); });
+  dotsWrapper.appendChild(dot);
+});
     goToSlide(0);
     resetInterval();
     enableSwipe();
@@ -333,7 +341,7 @@ function goToSlide(index){
 }
 
 function nextSlide(){
-  goToSlide((currentIndex+1)%document.querySelectorAll(".banner-slider .slides img").length);
+  goToSlide((currentIndex+1)%document.querySelectorAll(".banner-slider .slides > div").length);
 }
 
 function resetInterval(){
@@ -388,6 +396,7 @@ slidesContainer.addEventListener("pointerleave",()=>{
   }
 });
 }
+
 //search
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
@@ -519,6 +528,7 @@ async function loadProducts(){
     });
   } catch(err){ console.error(err); }
 }
+
 // UPLOAD BANNER
 document.getElementById("uploadBannerBtn").addEventListener("click", async ()=>{
   const file=document.getElementById("bannerFile").files[0];
@@ -540,6 +550,18 @@ async function deleteBanner(id){ await fetch("/api/banner/"+id,{method:"DELETE"}
 
 // INITIAL
 updateCartCount(); loadProducts(); loadBanners();
+// Prev / Next dùng cơ chế hiện tại
+document.querySelector('.banner-slider .prev').onclick = ()=> {
+  currentIndex = (currentIndex - 1 + document.querySelectorAll(".banner-slider .slides > div").length) % document.querySelectorAll(".banner-slider .slides > div").length;
+  goToSlide(currentIndex);
+  resetInterval();
+};
+
+document.querySelector('.banner-slider .next').onclick = ()=> {
+  currentIndex = (currentIndex + 1) % document.querySelectorAll(".banner-slider .slides > div").length;
+  goToSlide(currentIndex);
+  resetInterval();
+};
 
 </script>
 

@@ -72,6 +72,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "fruitshop",
+    resource_type: "image",
     allowed_formats: ["jpg","png","jpeg","webp"]
   }
 })
@@ -79,7 +80,7 @@ const upload = multer({ storage });
 // ===== GET tất cả sản phẩm =====
 app.get("/api/fruits", async (req,res)=>{
   try{
-    const fruits = await Fruit.find().sort({_id:-1})
+    const fruits = await Fruit.find().sort({_id:-1}).lean()
     res.json(fruits)
   }catch(err){
     res.status(500).json({error:err.message})
@@ -110,6 +111,10 @@ app.post("/api/upload", upload.single("image"), async (req,res)=>{
     const user = await User.findOne({ username });
     if(!user || user.role!=="admin") return res.status(403).json({error:"Chỉ admin mới được phép"});
     if(!req.file) return res.status(400).json({error:"Chưa chọn ảnh"});
+    if(!name || !price)
+      return res.status(400).json({error:"Thiếu tên hoặc giá"})
+    if(!image) 
+      return res.status(400).json({message:"Thiếu ảnh"})
 
     
 
@@ -117,7 +122,7 @@ app.post("/api/upload", upload.single("image"), async (req,res)=>{
       name,
       price,
       unit,
-      category: category.toLowerCase(),
+      category: category ? category.toLowerCase() : "",
       description,
       image: req.file.path
     });
@@ -164,17 +169,13 @@ app.post("/api/banner/upload", upload.single("image"), async (req,res)=>{
     if(!user || user.role !== "admin") return res.status(403).json({error:"Chỉ admin mới được phép"})
     if(!req.file) return res.status(400).json({error:"Chưa chọn ảnh"})
 
-      const protocol = req.protocol
-      const host = req.get("host")
+     
+    
       
       const banner = new Banner({
-<<<<<<< HEAD
         image: req.file.path
       })
-=======
-        image: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
-      });
->>>>>>> 16182c1658150495855e154151ed9191d71064a7
+
     await banner.save()
     res.json({success:true, banner})
   }catch(err){
@@ -380,16 +381,10 @@ app.post("/api/fruits/:id/thumb", upload.single("thumb"), async (req,res)=>{
 
     fruit.thumbs.push(req.file.path);
 
-<<<<<<< HEAD
+
     await fruit.save();
-=======
-    if(!fruit.thumbs) fruit.thumbs=[];
-    const protocol = req.protocol;
-const host = req.get("host");
-const thumbPath = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
-fruit.thumbs.push(thumbPath);
-await fruit.save();
->>>>>>> 16182c1658150495855e154151ed9191d71064a7
+
+   
 
     res.json({success:true, product: fruit});
 
@@ -400,9 +395,6 @@ await fruit.save();
 });
 
 
-// ===== Run server =====
-const PORT = 3000
-app.listen(PORT,()=>console.log("Server running on http://localhost:"+PORT))
 // ===== DELETE THUMB =====
 // ===== DELETE THUMB =====
 app.delete("/api/fruits/:id/thumb", async (req,res)=>{
@@ -433,3 +425,7 @@ app.delete("/api/fruits/:id/thumb", async (req,res)=>{
     res.status(500).json({message:"Lỗi xoá ảnh"});
   }
 });
+
+// ===== Run server =====
+const PORT = 3000
+app.listen(PORT,()=>console.log("Server running on http://localhost:"+PORT))

@@ -220,35 +220,84 @@ body {
     cursor:pointer;
   }
 /* ===== BANNER ===== */
+/* BANNER CONTAINER */
 .banner-container {
-  width: 90%;          /* chiều ngang nhỏ hơn 100% màn hình */
-  max-width: 1200px;   /* không quá to trên màn hình lớn */
-  margin: 0 auto;      /* căn giữa */
+  width: 90%;
+  max-width: 800px;       /* giới hạn chiều ngang tối đa */
+  margin: 20px auto;      /* căn giữa + khoảng cách trên/dưới */
   border-radius: 12px;
-  overflow: hidden; 
+  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
+/* SLIDER */
 .banner-slider {
-
   width: 100%;
-  max-height: 500px;   /* tối đa chiều cao trên PC */
+  position: relative;
   overflow: hidden;
-  position: relative;
 }
 
+/* SLIDES */
 .banner-slider .slides {
-  display: flex;          /* hiển thị ảnh theo hàng ngang */
+  display: flex;
   transition: transform 0.5s ease;
-  gap: 0;
+  scroll-snap-align: start;
 }
 
+/* Mỗi slide */
 .banner-slider .slides > div {
-  flex-shrink: 0;         /* mỗi slide giữ width */
-  width: 100%;
-  position: relative;
+  flex: 0 0 100%;      /* chiếm 100% container (không quá full body) */
+  max-width: 100%;     /* tránh tràn container */
 }
 
+/* Ảnh banner */
+.banner-slider .slides > div img {
+  width: 100%;         /* full container */
+  height: auto;
+  max-height: 450px;   /* chiều cao hợp lý trên PC */
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;      /* căn giữa */
+}
+
+/* Nút điều hướng */
+.banner-slider button.prev,
+.banner-slider button.next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  border: none;
+  padding: 12px 16px;
+  font-size: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.banner-slider button.prev { left: 10px; }
+.banner-slider button.next { right: 10px; }
+
+/* Dots */
+#bannerDots {
+  text-align: center;
+  margin-top: 10px;
+}
+
+#bannerDots span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+#bannerDots span.active {
+  background: #333;
+}
 /* dots */
 #bannerDots {
   text-align: center;
@@ -330,11 +379,52 @@ body {
  /* ===== MOBILE ===== */
 
 /* ===== MOBILE STYLES (≤768px) ===== */
-@media (max-width:768px){
+/* ===== MOBILE STYLES (≤768px) ===== */
+/* MOBILE BANNER */
+@media (max-width: 768px) {
   .banner-container {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory; /* giúp cuộn snap từng ảnh */
+    overflow: hidden; /* ẩn scroll */
+    position: relative;
+    max-height: 250px; /* giới hạn chiều cao banner trên mobile */
   }
+
+  .banner-slider .slides {
+    display: flex;
+    transition: transform 0.4s ease;
+  }
+
+  .banner-slider .slides > div {
+    flex: 0 0 100%; /* mỗi slide full width */
+    height: 250px;  /* cố định chiều cao slide */
+    overflow: hidden;
+  }
+
+  .banner-slider .slides > div img {
+    width: 100%;
+    height: 100%;      /* fill slide container */
+    object-fit: cover; /* không méo, cắt phần thừa */
+    display: block;
+  }
+
+  .banner-slider button.prev,
+  .banner-slider button.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 10;
+  }
+
+  .banner-slider button.prev { left: 10px; }
+  .banner-slider button.next { right: 10px; }
+
+
 
   .grid{
     grid-template-columns: repeat(2,1fr);
