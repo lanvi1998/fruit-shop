@@ -14,18 +14,13 @@
   "dependencies": {
     "axios": "^1.13.6",
     "body-parser": "^2.2.2",
-    "cloudinary": "^1.41.3",
+    "cloudinary": "^2.9.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "mongoose": "^9.3.3",
     "multer": "^2.1.1",
-<<<<<<< HEAD
-    "multer-storage-cloudinary": "^4.0.0",
+    "multer-storage-cloudinary": "^2.2.1",
     "nodemailer": "^8.0.3"
-=======
-    "nodemailer": "^8.0.3",
-    "uuid": "^13.0.0"
->>>>>>> 16182c1658150495855e154151ed9191d71064a7
   },
   "repository": {
     "type": "git",
