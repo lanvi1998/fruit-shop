@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <title>Giỏ hàng</title>
 <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* BODY */
 body {
@@ -14,44 +16,7 @@ body {
   padding:0;
 }
 
-/* HEADER */
-.header {
-  background:#0d7704; /* màu header */
-  color:white;
-  padding:15px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 3px 6px rgba(0,0,0,0.1);
-  position:sticky;
-  top:0;
-  z-index:100;
-}
 
-.header-left {
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.header-left .logo {
-  width:230px;
-  height:auto;
-}
-
-.header-left input[type="text"] {
-  padding:6px 10px;
-  border-radius:5px;
-  border:none;
-  width:250px;
-}
-
-.header-right .cart {
-  color:white;
-  text-decoration:none;
-  font-weight:bold;
-  font-size:16px;
-}
 
 /* SEARCH POPUP */
 #searchResults {
@@ -243,11 +208,17 @@ body {
 <!-- HEADER -->
 <header class="header">
   <div class="header-left">
-    <a href="index.html"><img src="/logo.png" class="logo" alt="Logo"></a>
-    <input type="text" id="searchInput" placeholder="Tìm sản phẩm...">
-    <div id="searchResults"></div>
+    <a href="index.html">
+      <img src="/logo.png" class="logo">
+    </a>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
+      <div id="searchResults"></div>
+    </div>
+   
   </div>
   <div class="header-right">
+    
     <a href="cart.html" class="cart-icon">
       <i class="fa-solid fa-cart-shopping"></i>
       <span id="cartCount" class="cart-count">0</span>

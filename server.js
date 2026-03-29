@@ -1,25 +1,41 @@
+// ===== Modules =====
 const express = require("express")
-const mongoose = require("mongoose")
 const cors = require("cors")
+const mongoose = require("mongoose")
 const multer = require("multer")
-
-const nodemailer = require("nodemailer") // Thêm nodemailer
-
-const app = express()
-app.use(express.json())
-app.use(cors())
-app.use(express.static("public"))
-
-
-
-// config Cloudinary
 const cloudinary = require("cloudinary").v2
-const { CloudinaryStorage } = require("multer-storage-cloudinary")
+const nodemailer = require("nodemailer")
+
+// ===== Cloudinary config =====
 cloudinary.config({
   cloud_name: "dnrillagh",
   api_key: "984556969348289",
   api_secret: "bSt9Rx9JP80MvUTNpTyBhtZGotg"
 })
+
+// ===== Multer memory storage =====
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+
+// ===== Upload function =====
+function uploadToCloudinary(fileBuffer, folder = "fruitshop") {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder },
+      (error, result) => {
+        if (error) return reject(error)
+        resolve(result)
+      }
+    )
+    stream.end(fileBuffer)
+  })
+}
+
+// ===== Express app =====
+const app = express()
+app.use(express.json())
+app.use(cors())
+app.use(express.static("public"))
 
 // ===== MongoDB =====
 mongoose.connect("mongodb://lanvi:lanvi98@ac-yeq62ge-shard-00-00.lxr0whp.mongodb.net:27017,ac-yeq62ge-shard-00-01.lxr0whp.mongodb.net:27017,ac-yeq62ge-shard-00-02.lxr0whp.mongodb.net:27017/fruitshop?ssl=true&replicaSet=atlas-8oee57-shard-0&authSource=admin&retryWrites=true&w=majority")
@@ -67,16 +83,7 @@ const Order = mongoose.model("Order", orderSchema)
 
 
 
-// ===== Multer config =====
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "fruitshop",
-    resource_type: "image",
-    allowed_formats: ["jpg","png","jpeg","webp"]
-  }
-})
-const upload = multer({ storage });
+
 // ===== GET tất cả sản phẩm =====
 app.get("/api/fruits", async (req,res)=>{
   try{
@@ -110,22 +117,23 @@ app.post("/api/upload", upload.single("image"), async (req,res)=>{
     const { name, price, category, description, username, unit } = req.body;
     const user = await User.findOne({ username });
     if(!user || user.role!=="admin") return res.status(403).json({error:"Chỉ admin mới được phép"});
-    if(!req.file) return res.status(400).json({error:"Chưa chọn ảnh"});
+    
     if(!name || !price)
       return res.status(400).json({error:"Thiếu tên hoặc giá"})
-    if(!image) 
-      return res.status(400).json({message:"Thiếu ảnh"})
+    if(!req.file) 
+      return res.status(400).json({error:"Chưa chọn ảnh"})
 
     
 
-    const fruit = new Fruit({
-      name,
-      price,
-      unit,
-      category: category ? category.toLowerCase() : "",
-      description,
-      image: req.file.path
-    });
+    const result = await uploadToCloudinary(req.file.buffer, "fruitshop/products");
+const fruit = new Fruit({
+  name,
+  price,
+  unit,
+  category: category ? category.toLowerCase() : "",
+  description,
+  image: result.secure_url
+});
 
     await fruit.save();
     res.json(fruit);
@@ -163,27 +171,25 @@ app.post("/api/login", async (req,res)=>{
 
 // ===== Banner =====
 app.post("/api/banner/upload", upload.single("image"), async (req,res)=>{
-  try{
+  try {
     const { username } = req.body
     const user = await User.findOne({ username })
     if(!user || user.role !== "admin") return res.status(403).json({error:"Chỉ admin mới được phép"})
     if(!req.file) return res.status(400).json({error:"Chưa chọn ảnh"})
 
-     
+    // Upload lên Cloudinary
+    const result = await uploadToCloudinary(req.file.buffer, "fruitshop/banners")
     
-      
-      const banner = new Banner({
-        image: req.file.path
-      })
-
+    const banner = new Banner({
+      image: result.secure_url
+    })
     await banner.save()
     res.json({success:true, banner})
-  }catch(err){
-    console.log(err)
+  } catch(err) {
+    console.error(err)
     res.status(500).json({error:err.message})
   }
 })
-
 app.get("/api/banners", async (req,res)=>{
   try{
     const banners = await Banner.find().sort({createdAt:-1})
@@ -363,37 +369,26 @@ app.put("/api/fruits/:id/description", async (req, res) => {
 // Express route upload thumbnail (server.js)
 // ===== UPLOAD THUMB =====
 app.post("/api/fruits/:id/thumb", upload.single("thumb"), async (req,res)=>{
-  try{
-    const { username } = req.body;
+  try {
+    const { username } = req.body
+    const user = await User.findOne({ username })
+    if(!user || user.role !== "admin") return res.status(403).json({success:false,message:"Chỉ admin"})
 
-    const user = await User.findOne({ username });
-    if(!user || user.role !== "admin")
-      return res.status(403).json({success:false,message:"Chỉ admin"});
+    const fruit = await Fruit.findById(req.params.id)
+    if(!fruit) return res.status(404).json({success:false,message:"Không tìm thấy sản phẩm"})
+    if(!req.file) return res.status(400).json({success:false,message:"Chưa chọn file"})
 
-    const fruit = await Fruit.findById(req.params.id);
-    if(!fruit)
-      return res.status(404).json({success:false,message:"Không tìm thấy sản phẩm"});
+    const result = await uploadToCloudinary(req.file.buffer, "fruitshop/thumbs")
+    if(!fruit.thumbs) fruit.thumbs = []
+    fruit.thumbs.push(result.secure_url)
 
-    if(!req.file)
-      return res.status(400).json({success:false,message:"Chưa chọn file"});
-
-    if(!fruit.thumbs) fruit.thumbs = [];
-
-    fruit.thumbs.push(req.file.path);
-
-
-    await fruit.save();
-
-   
-
-    res.json({success:true, product: fruit});
-
-  }catch(err){
-    console.error(err);
-    res.status(500).json({success:false,message:err.message});
+    await fruit.save()
+    res.json({success:true, product: fruit})
+  } catch(err) {
+    console.error(err)
+    res.status(500).json({success:false,message:err.message})
   }
-});
-
+})
 
 // ===== DELETE THUMB =====
 // ===== DELETE THUMB =====
