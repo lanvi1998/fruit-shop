@@ -168,8 +168,13 @@ app.post("/api/banner/upload", upload.single("image"), async (req,res)=>{
       const host = req.get("host")
       
       const banner = new Banner({
+<<<<<<< HEAD
         image: req.file.path
       })
+=======
+        image: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+      });
+>>>>>>> 16182c1658150495855e154151ed9191d71064a7
     await banner.save()
     res.json({success:true, banner})
   }catch(err){
@@ -375,7 +380,16 @@ app.post("/api/fruits/:id/thumb", upload.single("thumb"), async (req,res)=>{
 
     fruit.thumbs.push(req.file.path);
 
+<<<<<<< HEAD
     await fruit.save();
+=======
+    if(!fruit.thumbs) fruit.thumbs=[];
+    const protocol = req.protocol;
+const host = req.get("host");
+const thumbPath = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+fruit.thumbs.push(thumbPath);
+await fruit.save();
+>>>>>>> 16182c1658150495855e154151ed9191d71064a7
 
     res.json({success:true, product: fruit});
 

@@ -219,57 +219,27 @@ body {
     color:white;
     cursor:pointer;
   }
-  
-  /* ===== BANNER ===== */
-  /* Container banner */
+/* ===== BANNER ===== */
 .banner-container {
-  width: 100%;
-  overflow: hidden; /* Ẩn các ảnh thừa */
-  position: relative;
+  width: 90%;          /* chiều ngang nhỏ hơn 100% màn hình */
+  max-width: 1200px;   /* không quá to trên màn hình lớn */
+  margin: 0 auto;      /* căn giữa */
+  border-radius: 12px;
+  overflow: hidden; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .banner-slider {
+
   width: 100%;
-  overflow: hidden;       /* ẩn phần thừa ra ngoài */
+  max-height: 500px;   /* tối đa chiều cao trên PC */
+  overflow: hidden;
   position: relative;
 }
 
 .banner-slider .slides {
   display: flex;          /* hiển thị ảnh theo hàng ngang */
   transition: transform 0.5s ease;
-}
-
-.banner-slider img {
-  width: 100%;
-  flex-shrink: 0;         /* mỗi ảnh giữ đúng kích thước */
-  object-fit: cover;
-}
-#bannerDots {
-  text-align: center;
-  margin-top: 10px;
-}
-#bannerDots span {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background: #ccc;
-  border-radius: 50%;
-  margin: 0 5px;
-  cursor: pointer;
-}
-#bannerDots span.active {
-  background: #333;
-}
-  /* === BANNER SLIDER === */
-.banner-slider {
-  width: 100%;
-  overflow: hidden;       /* che phần ảnh thừa */
-  position: relative;
-}
-
-.banner-slider .slides {
-  display: flex;          /* xếp ảnh theo hàng ngang */
-  transition: transform 0.5s ease;  /* animation smooth */
   gap: 0;
 }
 
@@ -279,11 +249,7 @@ body {
   position: relative;
 }
 
-.banner-slider .slides img {
-  width: 100%;
-  object-fit: cover;
-}
-
+/* dots */
 #bannerDots {
   text-align: center;
   margin-top: 10px;
@@ -302,20 +268,9 @@ body {
 #bannerDots span.active {
   background: #333;
 }
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
-  .banner-slider {
-    max-height: 250px; /* giảm chiều cao trên mobile */
-  }
-  .banner-slider .slides img {
-    border-radius: 10px;
-  }
-  #bannerDots span {
-    width: 10px;
-    height: 10px;
-    margin: 0 3px;
-  }
-}
+
+
+
   /* ===== ADMIN ===== */
   .admin{
     background:white;
@@ -376,6 +331,10 @@ body {
 
 /* ===== MOBILE STYLES (≤768px) ===== */
 @media (max-width:768px){
+  .banner-container {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory; /* giúp cuộn snap từng ảnh */
+  }
 
   .grid{
     grid-template-columns: repeat(2,1fr);
