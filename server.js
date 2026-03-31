@@ -1,3 +1,4 @@
+require('dotenv').config();
 // ===== Modules =====
 const express = require("express")
 const cors = require("cors")
@@ -74,6 +75,7 @@ const orderSchema = new mongoose.Schema({
   phone: String,
   email: String,
   address: String,
+  note: String,
   total: Number,
   cart: Array,
   createdAt: { type: Date, default: Date.now }
@@ -237,10 +239,13 @@ app.delete("/api/banner/:id", async (req,res)=>{
 app.post("/api/order", async (req, res) => {
   try {
     const { name, phone, email, address, note, total, cart } = req.body;
+
+    // Lưu order
     const order = new Order({ name, phone, email, address, note, total, cart });
     await order.save();
 
-    let cartHtml = `
+    // Tạo HTML giỏ hàng
+    const cartHtml = `
       <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
         <thead>
           <tr>
@@ -267,17 +272,20 @@ app.post("/api/order", async (req, res) => {
       <p><b>Ghi chú:</b> ${note || "Không có"}</p>
     `;
 
+    // ===== Mailer =====
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
-        user: "coutsaigon1234@gmail.com",
-        pass: "mlzlepucmitgylpt"
-      },
-      tls: { rejectUnauthorized: false }
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+      }
     });
 
-    const mailOptions = {
-      from: '"Fruit Shop" <coutsaigon1234@gmail.com>',
+    // Gửi mail
+    const info = await transporter.sendMail({
+      from: `"Fruit Shop" <${process.env.GMAIL_USER}>`,
       to: "lanvihuynh79@gmail.com",
       subject: `Đơn hàng mới từ ${name}`,
       html: `<h3>Thông tin khách hàng</h3>
@@ -287,23 +295,17 @@ app.post("/api/order", async (req, res) => {
              <p><b>Địa chỉ:</b> ${address}</p>
              <h3>Giỏ hàng</h3>
              ${cartHtml}`
-    };
-
-    transporter.sendMail(mailOptions, (err, info) => {
-      if(err) {
-        console.error("Lỗi gửi mail:", err);
-        return res.status(500).json({ success: false, message: "Gửi đơn hàng thất bại" });
-      } else {
-        console.log("Mail đã gửi:", info);
-        return res.json({ success: true, message: "Đơn hàng đã gửi và lưu thành công" });
-      }
     });
 
+    console.log("Mail đã gửi:", info.messageId);
+
+    res.json({ success: true, message: "Đơn hàng đã gửi và lưu thành công" });
+
   } catch(err) {
-    console.error(err);
+    console.error("Lỗi gửi mail:", err);
     res.status(500).json({ success: false, message: "Gửi đơn hàng thất bại" });
   }
-}); // <-- kết thúc route
+});
 
 // API tìm kiếm sản phẩm
 // Hàm bỏ dấu tiếng Việt
