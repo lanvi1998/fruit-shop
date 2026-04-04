@@ -1,4 +1,11 @@
+
 require('dotenv').config();
+// 
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+console.log("GMAIL_USER:", process.env.GMAIL_USER);
+console.log("TELEGRAM_TOKEN:", process.env.TELEGRAM_TOKEN ? "OK" : "MISSING");
+console.log("CHAT_ID:", process.env.CHAT_ID ? "OK" : "MISSING");
+// 
 
 const cloudinary = require('cloudinary').v2;  // 🔹 phải đứng trên cùng
 const nodemailer = require("nodemailer");
