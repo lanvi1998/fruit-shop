@@ -1,214 +1,78 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Kết quả tìm kiếm</title>
-<link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<!-- Popup Login -->
-<div id="authPopup" class="popup" style="display:none;">
-  <h3>Admin Login</h3>
-  <input id="username" placeholder="Username"><br><br>
-  <input id="password" type="password" placeholder="Password"><br><br>
-  <button id="loginBtnPopup">Login</button>
-  <button onclick="closePopup()">Close</button>
-</div>
-
-<!-- HEADER -->
-<header class="header">
-  <div class="header-left">
-    <a href="index.html">
-      <img src="/logo.png" class="logo">
-    </a>
-    <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
+<style>
+  /* Container search */
+  #searchWrapper {
+    position: relative;
+    width: 300px; /* tuỳ chỉnh */
+  }
+  
+  /* Input */
+  #searchInput {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  /* Dropdown kết quả */
+  #searchResults {
+    position: absolute;
+    top: 100%; /* ngay dưới input */
+    left: 0;
+    width: 100%;
+    max-height: 200px; /* scroll nếu quá dài */
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 9999;
+    display: none; /* mặc định ẩn */
+  }
+  
+  /* Item kết quả */
+  .search-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .search-item:hover {
+    background: #f0f0f0;
+  }
+  </style>
+  
+  <div id="searchWrapper">
+    <input type="text" id="searchInput" placeholder="Tìm sản phẩm...">
     <div id="searchResults"></div>
   </div>
-  <div class="header-right">
-    <a href="cart.html" class="cart">🛒 Giỏ (<span id="cartCount">0</span>)</a>
-  </div>
-</header>
-
-<!-- NAVBAR -->
-<nav>
-  <a href="import.html">Trái cây nhập khẩu</a>
-  <a href="local.html">Trái cây nội địa</a>
-  <a href="cut.html">Trái cây cắt gọt</a>
-  <a href="food.html">Thực phẩm công nghệ</a>
-  <a href="gift.html">Giỏ quà tặng</a>
-  <a href="box.html">Hộp quà tặng</a>
-</nav>
-
-<!-- TITLE -->
-<h2 style="margin-left:20px;" id="title">Kết quả tìm kiếm</h2>
-
-<!-- PRODUCTS -->
-<div id="products" class="grid"></div>
-
-<!-- Nút login/logout -->
-<div id="loginWrapper" style="position:fixed; bottom:10px; left:10px; z-index:1000;">
-  <button id="loginBtn">Login</button>
-  <button id="logoutBtn" style="display:none;">Logout</button>
-</div>
-
-<script>
-// ===== GLOBAL =====
-let userRole = null;
-updateCartCount();
-
-// ===== SHOW/HIDE POPUP =====
-document.getElementById("loginBtn").addEventListener("click",()=>{ document.getElementById("authPopup").style.display="block"; });
-function closePopup(){ document.getElementById("authPopup").style.display="none"; }
-
-// ===== LOGIN =====
-document.getElementById("loginBtnPopup").addEventListener("click", async ()=>{
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  if(!username || !password){ alert("Điền đầy đủ username và password!"); return; }
-
-  try{
-    const res = await fetch("/api/login",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({username,password})
-    });
-    const data = await res.json();
-    if(data.success){
-      userRole = data.role;
-      localStorage.setItem("username", username);
-      localStorage.setItem("userRole", userRole);
-      closePopup();
-
-      document.getElementById("loginBtn").style.display="none";
-      document.getElementById("logoutBtn").style.display="inline-block";
-      loadSearchResults();
-    } else { alert(data.message || "Login thất bại!"); }
-  } catch(err){ console.error(err); alert("Login lỗi, thử lại!"); }
-});
-
-// ===== LOGOUT =====
-document.getElementById("logoutBtn").addEventListener("click", ()=>{
-  userRole = null;
-  localStorage.removeItem("username");
-  localStorage.removeItem("userRole");
-  document.getElementById("loginBtn").style.display="inline-block";
-  document.getElementById("logoutBtn").style.display="none";
-  loadSearchResults();
-});
-
-// ===== CHECK LOGIN =====
-window.addEventListener("load",()=>{
-  const storedRole = localStorage.getItem("userRole");
-  if(storedRole){ userRole = storedRole; document.getElementById("loginBtn").style.display="none"; document.getElementById("logoutBtn").style.display="inline-block"; }
-  updateCartCount();
-  loadSearchResults();
-});
-
-// ===== SEARCH =====
-const params = new URLSearchParams(window.location.search);
-const q = params.get("q") || "";
-document.getElementById("title").innerText = `Kết quả tìm kiếm cho "${q}"`;
-
-async function loadSearchResults(){
-  try{
-    const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-    const data = await res.json();
-    const grid = document.getElementById("products");
-    grid.innerHTML = "";
-
-    if(data.length === 0){ grid.innerHTML="<p style='padding:20px'>Không tìm thấy sản phẩm</p>"; return; }
-
-    data.forEach(p=>{
-  if(!p || !p._id) return;
-
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = `
-  <a href="/product.html?id=${p._id}">
-    <img src="${p.image || '/no-image.png'}">
-  </a>
-  <div class="card-content">
-    <h3 onclick="window.location.href='/product.html?id=${p._id}'" style="cursor:pointer">${p.name}</h3>
-    <p>${Number(p.price).toLocaleString()} VND</p>
-    ${userRole==="admin"
-      ? `<button onclick="deleteProduct('${p._id}')">❌ Xoá</button>`
-      : `<button onclick="addToCart('${p._id}','${p.name}',${p.price},'${p.image}')">🛒 Thêm vào giỏ</button>`}
-  </div>`;
   
-  grid.appendChild(card);
-});
-
-  } catch(err){ console.error(err); }
-}
-
-// ===== DELETE (admin) =====
-function deleteProduct(id){
-  fetch("/api/fruits/"+id,{
-    method:"DELETE",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({username: localStorage.getItem("username")})
-  }).then(()=>loadSearchResults());
-}
-
-// ===== CART =====
-function addToCart(id,name,price,image){
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const exist = cart.find(p=>p.id===id);
-  if(exist) exist.qty++; else cart.push({id,name,price,image,qty:1});
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartCount();
-  alert("Đã thêm vào giỏ hàng 🛒");
-}
-
-function updateCartCount(){
-  let cart = JSON.parse(localStorage.getItem("cart"))||[];
-  const total = cart.reduce((t,p)=>t+p.qty,0);
-  const el = document.getElementById("cartCount");
-  if(el) el.innerText = total;
-}
-
-// ===== SEARCH POPUP HEADER =====
-const searchInput = document.getElementById("searchInput");
-const searchResults = document.getElementById("searchResults");
-let timer, selectedIndex=-1, currentResults=[];
-searchInput.addEventListener("input", ()=>{
-  clearTimeout(timer);
-  timer = setTimeout(()=> fetchSearchPopup(searchInput.value.trim()),300);
-});
-
-async function fetchSearchPopup(query){
-  if(!query){ searchResults.style.display="none"; return; }
-  try{
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-    const products = await res.json();
-    currentResults = products;
-    renderResults(products);
-  } catch(err){ console.error(err); }
-}
-
-function renderResults(products){
-  searchResults.innerHTML="";
-  selectedIndex=-1;
-  if(products.length===0){ searchResults.style.display="none"; return; }
-  products.forEach((p,i)=>{
-    const div = document.createElement("div");
-    div.innerHTML = `<strong>${p.name}</strong><br><small>${Number(p.price).toLocaleString()} VND</small>`;
-    div.dataset.index = i;
-    div.addEventListener("click",()=> window.location.href=`/search.html?q=${encodeURIComponent(p.name)}`);
-    searchResults.appendChild(div);
+  <script>
+  // JS đơn giản
+  const searchInput = document.getElementById("searchInput");
+  const searchResults = document.getElementById("searchResults");
+  
+  searchInput.addEventListener("input", async () => {
+    const q = searchInput.value.trim();
+    if (!q) {
+      searchResults.style.display = "none";
+      searchResults.innerHTML = "";
+      return;
+    }
+  
+    try {
+      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+      const products = await res.json();
+  
+      if (!products.length) {
+        searchResults.innerHTML = "<div class='search-item'>Không tìm thấy</div>";
+        searchResults.style.display = "block";
+        return;
+      }
+  
+      searchResults.innerHTML = products.map(p =>
+        `<div class="search-item">${p.name} - ${p.price.toLocaleString()} VND</div>`
+      ).join("");
+      searchResults.style.display = "block";
+  
+    } catch (err) {
+      console.error("Search error:", err);
+    }
   });
-  const rect = searchInput.getBoundingClientRect();
-  searchResults.style.top = rect.bottom + window.scrollY + "px";
-  searchResults.style.left = rect.left + window.scrollX + "px";
-  searchResults.style.width = rect.width + "px";
-  searchResults.style.display="block";
-}
-
-document.addEventListener("click",(e)=>{
-  if(!searchResults.contains(e.target) && e.target!==searchInput){ searchResults.style.display="none"; }
-});
-</script>
-</body>
-</html>
+  </script>

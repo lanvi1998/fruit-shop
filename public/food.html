@@ -296,32 +296,49 @@ async function fetchSearchResults(query){
   } catch(err){ console.error(err); }
 }
 function renderResults(products){
-  searchResults.innerHTML="";
-  selectedIndex=-1;
-  if(products.length===0){ searchResults.style.display="none"; return; }
+  // Xóa nội dung cũ
+  searchResults.innerHTML = "";
+  selectedIndex = -1;
+
+  if(products.length === 0){
+    searchResults.style.display = "none";
+    return;
+  }
+
+  // Tạo từng item
   products.forEach((p,i)=>{
-    const div=document.createElement("div");
+    const div = document.createElement("div");
     div.innerHTML = `
-  <div style="display:flex; align-items:center; gap:8px;">
-    <img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
-    <div>
-      <strong>${p.name}</strong><br>
-      <small>${Number(p.price).toLocaleString()} VND</small>
-    </div>
-  </div>
-`;
-    div.dataset.index=i;
-    div.addEventListener("click",()=> window.location.href=`/product.html?id=${p._id}`);
+      <div style="display:flex; align-items:center; gap:8px; padding:4px 8px;">
+        <img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
+        <div>
+          <strong>${p.name}</strong><br>
+          <small>${Number(p.price).toLocaleString()} VND</small>
+        </div>
+      </div>
+    `;
+    div.dataset.index = i;
+    div.addEventListener("click", ()=> window.location.href = `/product.html?id=${p._id}`);
     searchResults.appendChild(div);
   });
+
+  // Đẩy searchResults ra ngoài body để không bị che
+  if(searchResults.parentElement !== document.body){
+    document.body.appendChild(searchResults);
+  }
+
+  // Đặt vị trí popup theo input
   const rect = searchInput.getBoundingClientRect();
   searchResults.style.top = rect.bottom + window.scrollY + "px";
   searchResults.style.left = rect.left + window.scrollX + "px";
   searchResults.style.width = rect.width + "px";
-  searchResults.style.display="block";
+  searchResults.style.display = "block";
 }
-document.addEventListener("click",(e)=>{
-  if(!searchResults.contains(e.target) && e.target!==searchInput){ searchResults.style.display="none"; }
+// Ẩn popup khi click ra ngoài
+document.addEventListener("click", (e) => {
+  if (!searchResults.contains(e.target) && e.target !== searchInput) {
+    searchResults.style.display = "none";
+  }
 });
 </script>
 </script>

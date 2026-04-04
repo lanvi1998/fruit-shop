@@ -9,6 +9,50 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* Search Results Popup */
+  .search-box {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.header, .header-left {
+  overflow: visible;
+}
+
+#searchResults {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: auto;             /* auto thay vì 100% */
+  min-width: 200px;        /* tối thiểu */
+  max-width: 400px;        /* giới hạn popup */
+  background: #e0e8e1;     /* màu nền xanh tối */
+  color: rgb(6, 1, 1);            /* chữ trắng */
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+  display: none;
+  overflow-y: auto;
+}
+
+#searchResults div {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+#searchResults div:hover {
+  background: #f0f0f0;
+}
+#authPopup {
+  position: fixed;       /* luôn trên màn hình */
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 10000;        /* cao hơn header/footer */
+}
 
 /* PRODUCT */
 .product-detail{
@@ -187,26 +231,29 @@ z-index:9999;
 
 <!-- HEADER -->
 <header class="header">
-
-  <div class="header-left" style="display:flex; align-items:center; gap:10px;">
+  <div class="header-left">
     <a href="index.html">
       <img src="/logo.png" class="logo">
     </a>
-  
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Tìm sản phẩm...">
+      <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
       <div id="searchResults"></div>
     </div>
+   
   </div>
-
-<div class="header-right">
-
-  <a href="cart.html" class="cart-icon">
-    <i class="fa-solid fa-cart-shopping"></i>
-    <span id="cartCount" class="cart-count">0</span>
-    </a>
-</div>
-
+  <div class="header-right">
+    <button id="loginBtn">
+      <i class="fa-solid fa-user"></i>
+    </button>
+    <button id="logoutBtn" style="display:none;"> <i class="fa-solid fa-user"></i></button>
+    
+    <a href="cart.html" class="cart-icon">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span id="cartCount" class="cart-count">0</span>
+      </a>
+  </div>
+ 
+  
 </header>
 <!-- NAVBAR -->
 <nav>
@@ -842,14 +889,11 @@ searchResults.style.display="block"
 })
 
 document.addEventListener("click",(e)=>{
-
-if(!searchResults.contains(e.target) && e.target!==searchInput){
-
-searchResults.style.display="none"
-
-}
-
-})
+  const searchBox = document.querySelector(".search-box");
+  if(!searchBox.contains(e.target)){
+    searchResults.style.display = "none";
+  }
+});
 
 
 </script>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fruit Shop</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== HEADER ===== */
+.header {display:flex; justify-content:space-between; align-items:center; padding:10px 20px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.05);}
+.header-left {display:flex; align-items:center; gap:15px;}
+.header-left .logo {width:100px;}
+.header-right {display:flex; align-items:center; gap:12px; position:relative;}
+#loginBtn, #logoutBtn, .cart-icon {display:flex; align-items:center; justify-content:center; width:50px; height:50px; border-radius:8px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.1); cursor:pointer; transition:0.3s;}
+#loginBtn:hover, #logoutBtn:hover, .cart-icon:hover {background:#e8f5e9; transform:translateY(-2px);}
+#loginBtn i, #logoutBtn i, .cart-icon i {font-size:24px; color:#4CAF50;}
+.cart-count {position:absolute; top:-5px; right:-5px; font-size:12px; width:18px; height:18px; background:red; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+/* ===== POPUP ===== */
+#authPopup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:1000;}
+#authPopup input {width:200px; padding:6px; margin-bottom:10px;}
+/* ===== BANNER SLIDER ===== */
+.banner-slider {position:relative; width:100%; overflow:hidden; margin:20px 0;}
+.banner-slider .slides {display:flex; transition:transform 0.5s ease;}
+.banner-slider .slides > div {flex:0 0 100%; position:relative;}
+.banner-slider .slides img {width:100%; display:block;}
+.banner-slider button.prev, .banner-slider button.next {position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.3); color:#fff; border:none; padding:10px; cursor:pointer; border-radius:50%; font-size:20px; z-index:10;}
+.banner-slider button.prev {left:10px;}
+.banner-slider button.next {right:10px;}
+#bannerDots {text-align:center; margin-top:10px;}
+#bannerDots span {display:inline-block; width:10px; height:10px; background:#ccc; border-radius:50%; margin:0 4px; cursor:pointer;}
+#bannerDots span.active {background:#4CAF50;}
+/* ===== CATEGORY NAVBAR ===== */
+.category-navbar-index {display:flex; overflow-x:auto; gap:10px; padding:8px; -webkit-overflow-scrolling:touch;}
+.category-navbar-index::-webkit-scrollbar {display:none;}
+.category-item {flex:0 0 auto; width:100px; text-align:center; background:#fff; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08); transition:0.3s;}
+.category-item img {width:60px; height:60px; border-radius:50%; margin-bottom:6px; object-fit:cover;}
+.category-item span {font-size:13px;}
+.category-item:hover {transform:translateY(-3px); box-shadow:0 4px 8px rgba(0,0,0,0.15); background:#e8f5e9;}
+/* ===== MINI NAVBAR / INFO BAR ===== */
+.navbar {display:flex; justify-content:space-between; flex-wrap:nowrap; gap:8px; background:#fff; border:1px solid #ddd; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:10px 12px; margin:10px;}
+.navbar a {display:flex; align-items:center; gap:6px; text-decoration:none; color:#4CAF50; font-size:13px; transition:0.3s;}
+.navbar a:hover {transform:scale(1.05);}
+.icon-circle {width:50px; height:50px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(0,0,0,0.1);}
+.icon {width:26px; height:26px; filter:invert(36%) sepia(95%) saturate(400%) hue-rotate(80deg) brightness(95%) contrast(90%);}
+.nav-text {display:flex; flex-direction:column; line-height:1.2;}
+.title {font-size:13px; font-weight:700;}
+.desc {font-size:11px; color:#555;}
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){.category-item {width:100px;} .category-item img{width:50px;height:50px;} .navbar{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; justify-items:center;} .icon-circle{width:40px;height:40px;} .icon{width:22px;height:22px;} .title{font-size:12px;} .desc{font-size:10px;}}
+@media(max-width:480px){.category-item{width:80px;} .category-item img{width:40px;height:40px;} .title{font-size:11px;} .desc{font-size:9px;} .icon-circle{width:36px;height:36px;} .icon{width:18px;height:18px;}}
+</style>
+</head>
+<body>
+
+<!-- Popup Login -->
+<div id="authPopup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:1000;">
+  <h3>Admin Login</h3>
+  <input id="username" placeholder="Username"><br><br>
+  <input id="password" type="password" placeholder="Password"><br><br>
+  <button id="loginBtnPopup">Login</button>
+  <button id="closePopupBtn">Close</button>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <a href="index.html"><img src="/logo.png" class="logo"></a>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Tìm sản phẩm..."></div>
+  </div>
+  <div class="header-right">
+    <a href="admin-orders.html" id="managerIcon" style="display:none;"><img src="icons/manager.png" style="width:32px;height:32px;border-radius:50%;"></a>
+    <button id="loginBtn"><i class="fa-solid fa-user"></i></button>
+    <button id="logoutBtn" style="display:none;"><i class="fa-solid fa-user"></i></button>
+    <a href="cart.html" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></a>
+  </div>
+</header>
+
+<!-- BANNER SLIDER -->
+<div class="banner-slider">
+  <button class="prev">❮</button>
+  <div class="slides"></div>
+  <button class="next">❯</button>
+</div>
+<div id="bannerDots"></div>
+
+<!-- CATEGORY -->
+<div class="category-navbar category-navbar-index">
+  <a href="import.html" class="category-item"><img src="import.jpg"><span>Trái cây nhập khẩu</span></a>
+  <a href="local.html" class="category-item"><img src="local.jpg"><span>Trái cây nội địa</span></a>
+  <a href="cut.html" class="category-item"><img src="cut.jpg"><span>Trái cây cắt gọt</span></a>
+</div>
+
+<!-- MINI NAVBAR -->
+<div class="navbar">
+  <a href="#"><div class="icon-circle"><img src="/icons/chat-luong-icon-1.png" class="icon"></div><div class="nav-text"><span class="title">Cam kết chất lượng</span><span class="desc">Trái cây tươi ngon</span></div></a>
+  <a href="#"><div class="icon-circle"><img src="/icons/giao-nhanh-1h.png" class="icon"></div><div class="nav-text"><span class="title">Giao hàng nhanh</span><span class="desc">Trong 48h</span></div></a>
+  <a href="#"><div class="icon-circle"><img src="/icons/doi-tra.png" class="icon"></div><div class="nav-text"><span class="title">Đổi trả dễ dàng</span><span class="desc">48h hỗ trợ</span></div></a>
+</div>
+
+<script>
+// ===== LOGIN POPUP =====
+document.getElementById("loginBtn").addEventListener("click",()=>{document.getElementById("authPopup").style.display="block";});
+function closePopup(){document.getElementById("authPopup").style.display="none";}
+
+// ===== LOGIN / LOGOUT =====
+let userRole=null;
+document.getElementById("loginBtnPopup").addEventListener("click",()=>{
+  const u=document.getElementById("username").value.trim();
+  const p=document.getElementById("password").value.trim();
+  if(!u||!p){alert("Điền đầy đủ username và password!");return;}
+  // Giả lập admin
+  if(u==="admin" && p==="123"){userRole="admin"; localStorage.setItem("userRole","admin"); setupAdmin(); closePopup();}
+  else{alert("Sai tài khoản");}
+});
+function setupAdmin(){
+  document.getElementById("loginBtn").style.display="none";
+  document.getElementById("logoutBtn").style.display="inline-block";
+  if(userRole==="admin"){document.getElementById("managerIcon").style.display="inline-block";}
+}
+document.getElementById("logoutBtn").addEventListener("click",()=>{
+  localStorage.removeItem("userRole"); userRole=null;
+  document.getElementById("loginBtn").style.display="inline-block";
+  document.getElementById("logoutBtn").style.display="none";
+  document.getElementById("managerIcon").style.display="none";
+});
+
+// ===== CART =====
+function updateCartCount(){let c=JSON.parse(localStorage.getItem("cart")||"[]"); let t=c.reduce((a,b)=>a+b.qty,0); document.getElementById("cartCount").innerText=t;}
+updateCartCount();
+
+// ===== BANNER SLIDER =====
+let currentIndex=0, interval;
+const slidesContainer=document.querySelector(".banner-slider .slides");
+const dotsWrapper=document.getElementById("bannerDots");
+const banners=["banner1.jpg","banner2.jpg","banner3.jpg"];
+function loadBanners(){
+  slidesContainer.innerHTML=""; dotsWrapper.innerHTML="";
+  banners.forEach((b,i)=>{
+    const div=document.createElement("div"); const img=document.createElement("img"); img.src=b; div.appendChild(img); slidesContainer.appendChild(div);
+    const dot=document.createElement("span"); if(i===0)dot.classList.add("active"); dot.addEventListener("click",()=>{goToSlide(i); resetInterval();}); dotsWrapper.appendChild(dot);
+  });
+}
+function goToSlide(i){currentIndex=i; slidesContainer.style.transform=`translateX(${-100*currentIndex}%)`; document.querySelectorAll("#bannerDots span").forEach((d,j)=>d.classList.toggle("active",j===i));}
+function nextSlide(){goToSlide((currentIndex+1)%banners.length);}
+function prevSlide(){goToSlide((currentIndex-1+banners.length)%banners.length);}
+document.querySelector(".banner-slider .prev").addEventListener("click",prevSlide);
+document.querySelector(".banner-slider .next").addEventListener("click",nextSlide);
+function resetInterval(){clearInterval(interval); interval=setInterval(nextSlide,5000);}
+loadBanners(); resetInterval();
+</script>
+
+</body>
+</html>
