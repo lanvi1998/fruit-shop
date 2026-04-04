@@ -1,0 +1,13 @@
+{
+    "environments": {
+      "production": {
+        "TELEGRAM_TOKEN": "botXXXX:XXXX",
+        "CHAT_ID": "123456789",
+        "CLOUD_NAME": "your_cloud_name",
+        "CLOUD_API_KEY": "xxx",
+        "CLOUD_API_SECRET": "xxx",
+        "GMAIL_USER": "your@gmail.com",
+        "GMAIL_PASS": "app password"
+      }
+    }
+  }
