@@ -33,13 +33,7 @@ if (!FRONTEND_URL) {
     tls: { rejectUnauthorized: false }
 });
 // ===== Modules =====
-        const express = require("express")
-const cors = require("cors")
-const mongoose = require("mongoose")
-const multer = require("multer")
-const cloudinary = require("cloudinary").v2
-const nodemailer = require("nodemailer")
-//
+
 const axios = require("axios")
 // const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
 // const TELEGRAM_CHAT_ID = process.env.CHAT_ID
