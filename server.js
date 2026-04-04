@@ -34,7 +34,7 @@ if (!FRONTEND_URL) {
 });
 // ===== Modules =====
 
-const axios = require("axios")
+
 // const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
 // const TELEGRAM_CHAT_ID = process.env.CHAT_ID
 
