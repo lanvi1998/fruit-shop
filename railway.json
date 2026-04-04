@@ -1,13 +1,14 @@
 {
     "environments": {
       "production": {
-        "TELEGRAM_TOKEN": "botXXXX:XXXX",
-        "CHAT_ID": "123456789",
-        "CLOUD_NAME": "your_cloud_name",
-        "CLOUD_API_KEY": "xxx",
-        "CLOUD_API_SECRET": "xxx",
-        "GMAIL_USER": "your@gmail.com",
-        "GMAIL_PASS": "app password"
+        "TELEGRAM_TOKEN": "8789511661:AAHZHgAo6v0HfllCLebqLiEXQSIUcF_ezzg",
+        "CHAT_ID": "8055707331",
+        "CLOUD_NAME": "dnrillagh",
+        "CLOUD_API_KEY": "984556969348289",
+        "CLOUD_API_SECRET": "bSt9Rx9JP80MvUTNpTyBhtZGotg",
+        "GMAIL_USER": "coutsaigon1234@gmail.com",
+        "GMAIL_PASS": "mlzlepucmitgylpt",
+        "FRONTEND_URL": "https://coutsaigon-production.up.railway.app"
       }
     }
   }

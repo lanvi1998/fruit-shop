@@ -1,4 +1,25 @@
 require('dotenv').config();
+const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.CHAT_ID;
+const FRONTEND_URL = process.env.FRONTEND_URL;
+if (!FRONTEND_URL) {
+  console.warn("⚠️ FRONTEND_URL chưa được cấu hình trong .env!");
+}
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
+  },
+  tls: { rejectUnauthorized: false }
+});
 // ===== Modules =====
 const express = require("express")
 const cors = require("cors")
@@ -8,8 +29,8 @@ const cloudinary = require("cloudinary").v2
 const nodemailer = require("nodemailer")
 //
 const axios = require("axios")
-const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
-const TELEGRAM_CHAT_ID = process.env.CHAT_ID
+// const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
+// const TELEGRAM_CHAT_ID = process.env.CHAT_ID
 
 // gửi text
 async function sendTelegram(text){
@@ -39,11 +60,11 @@ async function sendTelegramPhoto(photo, caption){
 }
 
 // ===== Cloudinary config =====
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET
-})
+// cloudinary.config({
+//   cloud_name: process.env.CLOUD_NAME,
+//   api_key: process.env.CLOUD_API_KEY,
+//   api_secret: process.env.CLOUD_API_SECRET
+// })
 
 // ===== Multer memory storage =====
 const storage = multer.memoryStorage()
@@ -361,7 +382,7 @@ Giá: ${(p.price*p.qty).toLocaleString()} VND
 
     
         // ===== URL frontend để admin click =====
-        const FRONTEND_URL = "https://coutsaigon.onrender.com/"; // đổi thành domain thật khi deploy
+      
     
         // Tạo HTML giỏ hàng với link sản phẩm
         const cartHtml = `
@@ -395,14 +416,14 @@ ${cart.map(p => `
         const orderLink = `${FRONTEND_URL}/order/${order._id}`;
     
         // ===== Mailer =====
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: process.env.GMAIL_USER,
-            pass: process.env.GMAIL_PASS
-          },
-          tls: { rejectUnauthorized: false }  // <-- quan trọng
-        });
+        // const transporter = nodemailer.createTransport({
+        //   service: "gmail",
+        //   auth: {
+        //     user: process.env.GMAIL_USER,
+        //     pass: process.env.GMAIL_PASS
+        //   },
+        //   tls: { rejectUnauthorized: false }  // <-- quan trọng
+        // });
     
         // Gửi mail
         const info = await transporter.sendMail({
