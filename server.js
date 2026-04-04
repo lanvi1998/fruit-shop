@@ -104,10 +104,9 @@ app.use(express.json())
         app.use(express.static("public"))
 
 // ===== MongoDB =====
-        mongoose.connect("mongodb://lanvi:lanvi98@ac-yeq62ge-shard-00-00.lxr0whp.mongodb.net:27017,ac-yeq62ge-shard-00-01.lxr0whp.mongodb.net:27017,ac-yeq62ge-shard-00-02.lxr0whp.mongodb.net:27017/fruitshop?ssl=true&replicaSet=atlas-8oee57-shard-0&authSource=admin&retryWrites=true&w=majority")
+mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log("MongoDB connected"))
-        .catch(err=>console.log(err))
-
+.catch(err=>console.log(err))
 // ===== Schemas =====
         const fruitSchema = new mongoose.Schema({
     name: String,
