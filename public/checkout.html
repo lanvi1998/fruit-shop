@@ -431,60 +431,67 @@ form.addEventListener("submit", async function(e){
     // redirect ngay sau khi fetch xong
     window.location.href = "confirm.html";
 });
+
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
-
-let allProducts = [];
-
-// load tất cả sản phẩm
-async function loadProducts(){
+let timer, selectedIndex=-1, currentResults=[];
+searchInput.addEventListener("input", ()=>{
+  clearTimeout(timer);
+  timer = setTimeout(()=> fetchSearchResults(searchInput.value.trim()),300);
+});
+async function fetchSearchResults(query){
+  if(!query){ searchResults.style.display="none"; return; }
   try{
-    const res = await fetch(`${API_URL}/api/fruits`);
-    allProducts = await res.json();
-  }catch(err){
-    console.error(err);
-  }
+    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+    const products = await res.json();
+    currentResults = products;
+    renderResults(products);
+  } catch(err){ console.error(err); }
 }
-
-loadProducts();
-
-// search khi gõ
-searchInput.addEventListener("input", function(){
-
-  const keyword = this.value.toLowerCase().trim();
+function renderResults(products){
+  // Xóa nội dung cũ
   searchResults.innerHTML = "";
+  selectedIndex = -1;
 
-  if(keyword === ""){
+  if(products.length === 0){
     searchResults.style.display = "none";
     return;
   }
 
-  const results = allProducts.filter(p =>
-    p.name.toLowerCase().includes(keyword)
-  );
+  // Tạo từng item
+  products.forEach((p,i)=>{
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <div style="display:flex; align-items:center; gap:8px; padding:4px 8px;">
+        <img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
+        <div>
+          <strong>${p.name}</strong><br>
+          <small>${Number(p.price).toLocaleString()} VND</small>
+        </div>
+      </div>
+    `;
+    div.dataset.index = i;
+    div.addEventListener("click", ()=> window.location.href = `/product.html?id=${p._id}`);
+    searchResults.appendChild(div);
+  });
 
-  results.slice(0,5).forEach(p=>{
-  const div = document.createElement("div");
-  div.className = "search-item";
+  // Đẩy searchResults ra ngoài body để không bị che
+  if(searchResults.parentElement !== document.body){
+    document.body.appendChild(searchResults);
+  }
 
-  div.innerHTML = `
-  <a href="product.html?id=${p._id}" style="display:flex;justify-content:space-between;width:100%;align-items:center;text-decoration:none;color:black;">
-
-    <div class="search-left">
-      <img src="${p.image}">
-      <span class="search-name">${p.name}</span>
-    </div>
-
-    <span class="search-price">
-      ${Number(p.price).toLocaleString()}đ
-    </span>
-
-  </a>
-  `;
-
-  searchResults.appendChild(div);
-});
+  // Đặt vị trí popup theo input
+  const rect = searchInput.getBoundingClientRect();
+  searchResults.style.top = rect.bottom + window.scrollY + "px";
+  searchResults.style.left = rect.left + window.scrollX + "px";
+  searchResults.style.width = rect.width + "px";
   searchResults.style.display = "block";
+}
+// Ẩn popup khi click ra ngoài
+document.addEventListener("click", (e) => {
+  if (!searchResults.contains(e.target) && e.target !== searchInput) {
+    searchResults.style.display = "none";
+  }
 });
 </script>
 
