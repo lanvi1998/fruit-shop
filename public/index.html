@@ -1308,22 +1308,36 @@ async function loadProducts() {
 }
 
 // Hàm xóa sản phẩm (gọi API backend)
+// Hàm xóa sản phẩm
 async function deleteProduct(id) {
-  if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
-  try {
-    const res = await fetch(`/api/fruits/${id}`, { method: "DELETE" });
-    const data = await res.json();
-    if (data.success) {
-      alert("Đã xóa sản phẩm!");
-      loadProducts(); // reload lại danh sách
-    } else {
-      alert("Xóa thất bại!");
-    }
-  } catch (err) {
-    console.error("Lỗi xóa sản phẩm:", err);
-  }
-}
 
+if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
+
+try {
+
+  const username = localStorage.getItem("username");
+
+  const res = await fetch(`/api/fruits/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username })
+  });
+
+  const data = await res.json();
+
+  if (data.message === "Deleted") {
+    alert("Đã xóa sản phẩm!");
+    loadProducts(); // reload lại danh sách
+  } else {
+    alert(data.error || "Xóa thất bại!");
+  }
+
+} catch (err) {
+  console.error("Lỗi xóa sản phẩm:", err);
+}
+}
 // UPLOAD BANNER
 document.getElementById("uploadBannerBtn").addEventListener("click", async ()=>{
   const file=document.getElementById("bannerFile").files[0];
