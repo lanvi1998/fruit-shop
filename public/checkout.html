@@ -417,16 +417,16 @@ form.addEventListener("submit", async function(e){
     if(!isBuyNow) localStorage.removeItem("cart");
 
     try {
-        const res = await fetch(`${API_URL}/api/order`, {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({name, phone, email, address, note, total, cart: cartToSend})
-        });
-        const data = await res.json();
-        console.log("Order gửi server:", data);
-    } catch(err) {
-        console.error("Gửi order lỗi:", err);
-    }
+    await fetch(`${API_URL}/api/order`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({name, phone, email, address, note, total, cart: cartToSend})
+    });
+} catch(err) {
+    console.error("Gửi order lỗi:", err);
+}
+
+window.location.href = "confirm.html";
 
     // redirect ngay sau khi fetch xong
     window.location.href = "confirm.html";
