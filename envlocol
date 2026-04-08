@@ -14,4 +14,6 @@ CLOUD_NAME=dnrillagh
 CLOUD_API_KEY=984556969348289
 CLOUD_API_SECRET=bSt9Rx9JP80MvUTNpTyBhtZGotg
 # mongo
+MONGO_URI=mongodb://lanvi:lanvi98@ac-yeq62ge-shard-00-00.lxr0whp.mongodb.net:27017,ac-yeq62ge-shard-00-01.lxr0whp.mongodb.net:27017,ac-yeq62ge-shard-00-02.lxr0whp.mongodb.net:27017/fruitshop?ssl=true&replicaSet=atlas-8oee57-shard-0&authSource=admin&retryWrites=true&w=majority
+# mongo dploy
 MONGO_URI=mongodb+srv://lanvi:lanvi98@cluster0.lxr0whp.mongodb.net/fruitshop?retryWrites=true&w=majority 

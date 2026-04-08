@@ -14,6 +14,177 @@
 <body>
 
   <style>
+    /*  */
+    
+     /* Grid sale */
+  #saleProducts {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 sp / dòng PC */
+    gap: 16px;
+    margin: 20px 0;
+  }
+  
+  /* Card */
+  #saleProducts .card {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background: #fff;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  #saleProducts .card:hover { transform: translateY(-5px); }
+  
+  /* Sale badge */
+  .sale-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: red;
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  
+  /* Giá gốc */
+  .old-price {
+    text-decoration: line-through;
+    color: #999;
+    margin: 4px 0;
+  }
+  
+  /* Giá sale */
+  .sale-price {
+    color: red;
+    font-weight: bold;
+    margin: 4px 0;
+  }
+  
+  /* Giá bình thường */
+  .price {
+    font-weight: bold;
+    color: #333;
+    margin: 4px 0;
+  }
+  
+  
+  #saleProducts .card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  
+  /* Button thêm vào giỏ / xoá */
+  #saleProducts .card button {
+    margin-top: auto;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #66bb6a, #2e7d32);
+    color: white;
+    cursor: pointer;
+  }
+  #saleProducts .card button:hover { background: #218838; }
+  
+  /* ===== Responsive ===== */
+  /* Tablet */
+  @media (max-width: 1024px) {
+    #saleProducts {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  /* Mobile */
+  @media (max-width: 480px) {
+    #saleProducts {
+      grid-template-columns: repeat(2, 1fr); /* 2 sp / dòng */
+    }
+  
+    #saleProducts .card img {
+      height: 150px;
+    }
+  
+    #saleProducts .card button {
+      padding:6px;
+    font-size:13px;
+}
+    }
+  
+    .sale-badge {
+      font-size: 10px;
+      padding: 1px 4px;
+    }
+  
+    
+    /* ===== FIX MINI NAVBAR ICON & TEXT ===== */
+/* FIX MINI NAVBAR TRÊN MOBILE: ICON & CHỮ GẦN NHAU */
+/* CHO .category-navbar-index item trên mobile (<480px) */
+@media (max-width: 480px) {
+  .category-navbar-index .category-item {
+    padding: 4px;           /* giảm padding bên trong */
+    gap: 2px;               /* khoảng cách giữa ảnh và chữ */
+    text-align: center;
+  }
+
+  .category-navbar-index .category-item img {
+    width: 50px;            /* giảm kích thước ảnh nếu muốn */
+    height: 50px;
+    margin-bottom: 2px;     /* khoảng cách ảnh - chữ */
+  }
+
+  .category-navbar-index .category-item span {
+    font-size: 11px;        /* chữ nhỏ hơn */
+    line-height: 1.1;       /* chữ sát ảnh hơn */
+  }
+}
+/* CHO .category-navbar-index item trên mobile */
+@media (max-width: 480px) {
+  .category-navbar-index {
+    gap: 8px;               /* khoảng cách giữa các item */
+    padding: 8px 6px;       
+    overflow-x: auto;
+  }
+
+  .category-navbar-index .category-item {
+    display: flex;
+    flex-direction: column; /* ảnh trên, chữ dưới */
+    align-items: center;
+    justify-content: center;
+    padding: 4px;           /* giảm padding */
+    gap: 2px;               /* ảnh và chữ gần nhau */
+    width: 100px;           /* chiều rộng mỗi item */
+    border-radius: 12px;    /* bo tròn */
+    background-color: #cee2c9; /* xanh nhạt */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* nhẹ shadow */
+    text-align: center;
+    transition: 0.3s;
+  }
+
+  .category-navbar-index .category-item img {
+    width: 50px;            
+    height: 50px;
+    margin-bottom: 2px;     /* khoảng cách ảnh - chữ */
+    border-radius: 50%;     /* tròn */
+  }
+
+  .category-navbar-index .category-item span {
+    font-size: 12px;        
+    line-height: 1.1;       
+    color: #000601;         /* chữ xanh đậm hơn nền */
+    font-weight: 500;
+  }
+
+  /* hover nhẹ */
+  .category-navbar-index .category-item:hover {
+    transform: translateY(-2px);
+    background-color: #b0edac;
+  }
+}
+    /*  */
    .delete-banner{
   position:absolute;
   top:10px;
@@ -198,7 +369,7 @@
 }
 
 .category-title .category-text {
-  color: #2e7d32; /* xanh lá, bạn muốn đổi màu khác thì thay mã màu */
+  color: #2e7d32;; /* xanh lá, bạn muốn đổi màu khác thì thay mã màu */
   font-size: 24px;
   font-weight: 600;
 }
@@ -428,7 +599,7 @@ nav a:hover img {
     gap: 8px;              /* khoảng cách giữa các item */
     padding: 8px 6px;
     border: 2px solid #add1b0; 
-    background-color: #c1f3b2;
+    background-color: hsl(0, 0%, 99%);
     margin: 10px 0;
   }
 
@@ -443,7 +614,8 @@ nav a:hover img {
   }
 
   .category-navbar-index .category-item span {
-    font-size: 14px;        /* chữ to hơn, dễ đọc */
+    font-size: 14px; 
+           /* chữ to hơn, dễ đọc */
   }
 }
 
@@ -512,6 +684,7 @@ nav a:hover img {
 
 /* ================= MINI NAVBAR ================= */
 /* Navbar desktop cố định 1 dòng */
+
 .navbar {
   display: flex;                /* đổi từ grid sang flex */
   justify-content: space-between; /* cách đều nhau */
@@ -521,8 +694,10 @@ nav a:hover img {
 
 .navbar a {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px; /* khoảng cách icon & text */
+  text-align: center;
+  gap: 2px; /* khoảng cách icon & text */
   color: #4CAF50;
   text-decoration: none;
   font-weight: 500;
@@ -669,6 +844,7 @@ nav a:hover img {
 
     </style>
 
+<!-- Popup Login -->
 <!-- Popup Login -->
 <div id="authPopup">
   <h3>Admin Login</h3>
@@ -851,18 +1027,31 @@ nav a:hover img {
   </h2>
   
   <div id="highlight" class="grid"></div>
-  
+  <h2 class="title-highlight">🔥 Sản phẩm SALE</h2>
+<div id="saleProducts" class="grid"></div>
   
 
 <!-- ADMIN UPLOAD -->
 <div class="admin">
   <h2>Admin Upload sản phẩm nổi bật</h2>
+
   <input id="name" placeholder="Tên sản phẩm">
   <input id="price" placeholder="Giá">
-  <input id="unit" placeholder="Đơn vị"> 
+  <input id="unit" placeholder="Đơn vị">
+
+  <!-- THÊM CÁI NÀY -->
+  <select id="category">
+    <option value="highlight">⭐ Sản phẩm nổi bật</option>
+    <option value="sale">Sản phẩm giảm giá</option>
+  </select>
+
   <input type="file" id="image">
+
+  <input id="salePercent" placeholder="Sale % (vd: 10)">
+
   <button id="uploadProductBtn">Upload</button>
 </div>
+<!--  -->
 <div class="admin-banner" style="display:none; margin-top:20px; text-align:center;">
   <h2>Admin Upload Banner</h2>
   <input type="file" id="bannerFile"/>
@@ -928,6 +1117,7 @@ let startX = 0;
 document.getElementById("loginBtn").addEventListener("click", () => {
   document.getElementById("authPopup").style.display = "block";
 });
+
 
 function closePopup() {
   document.getElementById("authPopup").style.display = "none";
@@ -1024,7 +1214,62 @@ window.addEventListener("load", () => {
     }
   }
 });
+// /
+document.getElementById("uploadProductBtn").addEventListener("click", async () => {
+  const name = document.getElementById("name").value.trim();
+  const price = document.getElementById("price").value.trim();
+  const unit = document.getElementById("unit").value.trim();
+  const category = document.getElementById("category")?.value.trim() || "";
+  const description = document.getElementById("description")?.value.trim() || "";
+  const image = document.getElementById("image").files[0];
+  const salePercent = parseInt(document.getElementById("salePercent").value.trim()) || 0;
+  const username = localStorage.getItem("username"); // admin username
 
+  if (!name || !price || !image) {
+    alert("Vui lòng điền tên, giá và chọn ảnh!");
+    return;
+  }
+  
+  
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("price", price);
+  formData.append("unit", unit || "Chưa có");
+  formData.append("category", category);
+  formData.append("description", description);
+  formData.append("username", username);
+  formData.append("image", image); // bắt buộc "image"
+  formData.append("salePercent", salePercent);
+  try {
+    const res = await fetch("/api/upload", {  // 🔹 sửa endpoint đúng
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      console.error("Server trả lỗi:", data.error);
+      alert("Upload thất bại: " + data.error);
+      return;
+    }
+
+    alert("Upload sản phẩm thành công!");
+
+    // reset form
+    document.getElementById("name").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("unit").value = "";
+    if(document.getElementById("category")) document.getElementById("category").value = "";
+    if(document.getElementById("description")) document.getElementById("description").value = "";
+    document.getElementById("image").value = "";
+
+    if (typeof loadProducts === "function") loadProducts(); // reload danh sách sản phẩm
+  } catch (err) {
+    console.error("Lỗi fetch:", err);
+    alert("Upload thất bại!");
+  }
+});
 // ====== PRODUCTS ======
 window.userRole = localStorage.getItem("userRole");
 
@@ -1253,91 +1498,73 @@ document.addEventListener("click", (e) => {
   }
 });
 // ====== PRODUCTS ======
-// ====== PRODUCTS ======
-
 async function loadProducts() {
   try {
     const res = await fetch("/api/fruits");
     const products = await res.json();
-    const grid = document.getElementById("highlight");
-    grid.innerHTML = "";
 
-    // Lọc sản phẩm nổi bật
-    const highlightProducts = products.filter(
-      p => p.category?.toLowerCase() === "highlight"
-    );
+    const highlightGrid = document.getElementById("highlight");
+    const saleGrid = document.getElementById("saleProducts");
 
-    highlightProducts.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "card";
+    highlightGrid.innerHTML = "";
+    saleGrid.innerHTML = "";
 
-      card.innerHTML = `
-        <img src="${p.image}" alt="${p.name}" onclick="window.location.href='product.html?id=${p._id}'">
+    products.forEach(p => {
+      const price = Number(p.price) || 0;
+      const salePercent = Number(p.salePercent) || 0;
+      const salePrice = salePercent > 0 ? price - (price * salePercent / 100) : price;
 
+      // HTML card
+      let priceHTML = "";
+      if (salePercent > 0) {
+        priceHTML = `
+          <p class="old-price">${price.toLocaleString()} VND</p>
+          <p class="sale-price">${salePrice.toLocaleString()} VND / ${p.unit || ""}</p>
+        `;
+      } else {
+        priceHTML = `<p class="price">${price.toLocaleString()} VND / ${p.unit || ""}</p>`;
+      }
+
+      const cardHTML = `
+        ${salePercent > 0 ? `<div class="sale-badge">-${salePercent}%</div>` : ""}
+        <img src="${p.image}" style="cursor:pointer"
+             onclick="window.location.href='product.html?id=${p._id}'">
         <div class="card-content">
           <h3>${p.name}</h3>
-          <p>${Number(p.price).toLocaleString()} VND / ${p.unit}</p>
-
-          <div class="buttons">
-            <button class="add-cart" onclick="addToCart(
-              '${p._id}',
-              '${p.name}',
-              '${p.price}',
-              '${p.image}',
-              '${p.unit}'
-            )">Thêm vào giỏ</button>
-
-            <button class="buy-now" onclick="window.location.href='checkout.html?productId=${p._id}'">
-              Mua ngay
-            </button>
-
-            ${userRole === "admin" 
-              ? `<button class="delete" onclick="deleteProduct('${p._id}')">❌ Xóa</button>` 
-              : ""
-            }
-          </div>
+          ${priceHTML}
+          ${
+            userRole === "admin"
+            ? `<button onclick="deleteProduct('${p._id}')">❌ Xoá</button>`
+            : `<button onclick="addToCart('${p._id}','${p.name}',${salePrice},'${p.image}','${p.unit}')">🛒 Thêm vào giỏ</button>`
+          }
         </div>
       `;
 
-      grid.appendChild(card);
+      // ⭐ Highlight
+      if (p.category === "highlight") {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = cardHTML;
+        highlightGrid.appendChild(card);
+      }
+
+      // 🔥 Sale: hiển thị tất cả sản phẩm category === "sale"
+      if (p.category === "sale") {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = cardHTML;
+        saleGrid.appendChild(card);
+      }
     });
 
-  } catch (err) {
+  } catch(err) {
     console.error("Lỗi load sản phẩm:", err);
   }
 }
 
-// Hàm xóa sản phẩm (gọi API backend)
-// Hàm xóa sản phẩm
-async function deleteProduct(id) {
+updateCartCount();
+loadProducts();
 
-if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
-
-try {
-
-  const username = localStorage.getItem("username");
-
-  const res = await fetch(`/api/fruits/${id}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ username })
-  });
-
-  const data = await res.json();
-
-  if (data.message === "Deleted") {
-    alert("Đã xóa sản phẩm!");
-    loadProducts(); // reload lại danh sách
-  } else {
-    alert(data.error || "Xóa thất bại!");
-  }
-
-} catch (err) {
-  console.error("Lỗi xóa sản phẩm:", err);
-}
-}
 // UPLOAD BANNER
 document.getElementById("uploadBannerBtn").addEventListener("click", async ()=>{
   const file=document.getElementById("bannerFile").files[0];
@@ -1372,7 +1599,10 @@ if(data.success){
 }
 
 // INITIAL
-updateCartCount(); loadProducts(); loadBanners();
+updateCartCount();
+loadProducts();
+loadSaleProducts();
+loadBanners();
 // Prev / Next dùng cơ chế hiện tại
 document.querySelector('.banner-slider .prev').onclick = ()=> {
   currentIndex = (currentIndex - 1 + document.querySelectorAll(".banner-slider .slides > div").length) % document.querySelectorAll(".banner-slider .slides > div").length;
@@ -1388,6 +1618,7 @@ document.querySelector('.banner-slider .next').onclick = ()=> {
 
 </script>
 <style>
+
   /* Nút nổi chính */
  
 #floatingBtn {
@@ -1481,8 +1712,8 @@ document.querySelector('.banner-slider .next').onclick = ()=> {
 </div>
 
 <style>
-
-</style>
+ 
+  </style>
 
 <script>
 // Chạy khi DOM load xong
@@ -1509,7 +1740,6 @@ document.addEventListener("click",()=>{
 contactPopup.addEventListener("click",(e)=>{
   e.stopPropagation();
 });
-
 
 
 </script>

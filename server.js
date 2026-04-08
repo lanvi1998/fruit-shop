@@ -103,22 +103,31 @@ mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log("MongoDB connected"))
 .catch(err=>console.log(err))
 // ===== Schemas =====
-        const fruitSchema = new mongoose.Schema({
+     // ===== Schemas =====
+const fruitSchema = new mongoose.Schema({
     name: String,
-            price: Number,
-            unit: String,
-            image: String,
-            description: String,
-            category: String,
-            thumbs: { type: [String], default: [] } // Thêm dòng này
-});
-        const Fruit = mongoose.model("Fruit", fruitSchema)
+    price: Number,
+    unit: String,
+    image: String,
+    description: String,
+    category: String,
+    thumbs: { type: [String], default: [] },
+  
+    salePercent: {
+      type: Number,
+      default: 0
+    }
+  });
+  
+  const Fruit = mongoose.model("Fruit", fruitSchema);
+  
+  
+  const userSchema = new mongoose.Schema({
+    username: { type: String, unique: true },
+    password: String,
+    role: { type: String, default: "user" } // "admin" hoặc "user"
+  });
 
-const userSchema = new mongoose.Schema({
-    username:{type:String, unique:true},
-    password:String,
-            role:{type:String, default:"user"} // "admin" hoặc "user"
-})
         const User = mongoose.model("User", userSchema)
 
 // Banner
@@ -226,36 +235,44 @@ await Fruit.findByIdAndDelete(req.params.id)
         })
 
 // ===== Upload sản phẩm (admin only) =====
-        app.post("/api/upload", upload.single("image"), async (req,res)=>{
-        try{
-        const { name, price, category, description, username, unit } = req.body;
-    const user = await User.findOne({ username });
-        if(!user || user.role!=="admin") return res.status(403).json({error:"Chỉ admin mới được phép"});
-
-        if(!name || !price)
-        return res.status(400).json({error:"Thiếu tên hoặc giá"})
-        if(!req.file)
-        return res.status(400).json({error:"Chưa chọn ảnh"})
+app.post("/api/upload", upload.single("image"), async (req,res)=>{
+    try{
+      const { name, price, category, description, username, unit, salePercent } = req.body;
+    //       // 🔹 Check giá trị salePercent nhận từ client
+    // console.log("salePercent received:", salePercent, "type:", typeof salePercent);
 
 
 
-        const result = await uploadToCloudinary(req.file.buffer, "fruitshop/products");
-    const fruit = new Fruit({
-    name,
-            price,
-            unit: unit || "Chưa có",  // ✅ nếu admin không nhập, mặc định "Chưa có"
-            category: category ? category.toLowerCase() : "",
-            description,
-            image: result.secure_url
-});
-await fruit.save();
-    res.json(fruit);
-  }catch(err){
-        console.log(err);
-    res.status(500).json({error:err.message});
-        }
-        });
-
+  
+      const user = await User.findOne({ username });
+      if(!user || user.role!=="admin") 
+        return res.status(403).json({error:"Chỉ admin mới được phép"});
+  
+      if(!name || !price)
+        return res.status(400).json({error:"Thiếu tên hoặc giá"});
+      if(!req.file)
+        return res.status(400).json({error:"Chưa chọn ảnh"});
+  
+      const result = await uploadToCloudinary(req.file.buffer, "fruitshop/products");
+  
+      const fruit = new Fruit({
+        name,
+        price: Number(price),              // chuyển price thành số
+        unit: unit || "Chưa có",
+        category: category ? category.toLowerCase() : "",
+        description,
+        image: result.secure_url,
+        salePercent: parseInt(salePercent) || 0  // ✅ chuyển salePercent thành số
+      });
+  
+      await fruit.save();
+      res.json(fruit);
+  
+    } catch(err){
+      console.log(err);
+      res.status(500).json({error:err.message});
+    }
+  });
 // ===== REGISTER =====
         app.post("/api/register", async (req,res)=>{
         try{
