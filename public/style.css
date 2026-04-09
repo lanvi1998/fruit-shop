@@ -243,43 +243,63 @@ nav{
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
   }
   /* ===== CARD ===== */
-  .card{
-    background:white;
-    border-radius:15px;
-    overflow:hidden;
-    box-shadow:0 4px 15px rgba(0,0,0,0.15);
-    display:flex;
-    flex-direction:column;
-    transition:0.3s;
-  }
-  .card:hover{
-    transform:translateY(-8px) scale(1.03);
-  }
-  .card img{
-    width:100%;
-    height:260px;
-    object-fit:cover;
-  }
-  .card-content{
-    padding:12px;
-    display:flex;
-    flex-direction:column;
-    flex:1;
-  }
-  .card-content h3{
-    color:#2e7d32;
-    margin:8px 0;
-  }
-  .card-content button{
-    margin-top:auto;
-    padding:10px;
-    border:none;
-    border-radius:8px;
-    background:linear-gradient(135deg,#66bb6a,#2e7d32);
-    color:white;
-    cursor:pointer;
-  }
-  .card-content 
+  /* Container scroll ngang */
+#highlight, #saleProducts {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* mượt trên mobile */
+}
+
+/* Card */
+.card {
+  flex: 0 0 52%;       /* chiếm 52% width container → card to hơn */
+  min-width: 52%;      /* đảm bảo card không co quá nhỏ */
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+}
+
+/* Card image */
+.card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  
+}
+
+/* Card content */
+.card-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-content h3 {
+  color: #2e7d32;
+  margin: 8px 0;
+}
+
+.card-content button {
+  margin-top: auto;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg,#66bb6a,#2e7d32);
+  color: white;
+  cursor: pointer;
+}
 /* ===== BANNER ===== */
 .banner-container {
   width: 90%;          /* chiều ngang nhỏ hơn 100% màn hình */
@@ -481,10 +501,15 @@ nav{
   .grid{
     grid-template-columns: repeat(2,1fr);
     gap:12px;
+    
   }
 
   .card img{
-    height:120px;
+    height:160px;
+    border-radius: 8px;
+    padding: 10px;
+  
+    
   }
 
   .card-content{

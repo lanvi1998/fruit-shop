@@ -117,7 +117,42 @@
       padding:6px;
     font-size:13px;
 }
-    }
+  /* Grid container scroll ngang */
+#highlight, #saleProducts {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* mượt trên iOS */
+}
+
+/* Card */
+#highlight .card, #saleProducts .card {
+  flex: 0 0 46%; /* chiếm ~50% width - 2 card trên 1 màn hình */
+  min-width: 48%; 
+  box-sizing: border-box;
+  
+}
+/* Container scroll ngang */
+/* Container scroll ngang */
+#highlight, #saleProducts {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;          /* khoảng cách giữa card */
+  padding-left: 0;    /* bỏ padding trái */
+  padding-right: 16px; /* có thể giữ padding phải cho scroll đẹp */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;          /* chắc chắn container không bị margin */
+}
+/* Optional: ẩn scrollbar để nhìn đẹp hơn */
+/* #highlight::-webkit-scrollbar,
+#saleProducts::-webkit-scrollbar {
+  display: none;
+} */
+
+}
   
     .sale-badge {
       font-size: 10px;
@@ -469,7 +504,8 @@
   }
   .category-item span {
     font-size: 11px;
-  }}
+  }
+}
  /*  */
 /* ===== NAVBAR SẢN PHẨM RESPONSIVE ===== */
 nav {
