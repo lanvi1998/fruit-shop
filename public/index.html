@@ -14,7 +14,17 @@
 <body>
 
   <style>
-   
+   @media (max-width: 480px){
+
+body.is-admin #searchInput{
+  max-width: 180px !important;
+}
+
+body.is-admin .search-box{
+  max-width: 230px;
+}
+
+}
     /*  */
     .sub-title{
   display:flex;
@@ -314,8 +324,8 @@
     z-index: 999;
   }
   #searchInput {
-    width: 100%;
-    box-sizing: border-box;
+    max-width: 245px;
+        min-width: 120px;
   }
   #searchResults {
     width: 100%;
@@ -327,6 +337,7 @@
     z-index: 1000;
   }
 }
+
  /* Chỉnh Login / Logout + Giỏ hàng cùng size */
 /* Login / Logout / Cart cùng size */
 /* ===== LOGIN / LOGOUT / CART ===== */
@@ -1217,6 +1228,8 @@ document.getElementById("loginBtnPopup").addEventListener("click", async () => {
 
       closePopup();
 
+  window.location.reload(); // ⭐ THÊM DÒNG NÀY
+
       // Ẩn login, hiện logout
       document.getElementById("loginBtn").style.display = "none";
       document.getElementById("logoutBtn").style.display = "inline-block";
@@ -1273,9 +1286,11 @@ window.addEventListener("load", () => {
   const storedRole = localStorage.getItem("userRole");
   if(storedRole){
     userRole = storedRole;
+   
     document.getElementById("loginBtn").style.display = "none";
     document.getElementById("logoutBtn").style.display = "inline-block";
     if(userRole === "admin"){
+      document.body.classList.add("is-admin"); 
       document.querySelector(".admin").style.display = "block";
       document.querySelector(".admin-banner").style.display = "block";
       document.getElementById("adminOrdersLink").style.display = "inline-block";
@@ -1601,9 +1616,7 @@ async function loadProducts() {
 
   <div class="card-content">
     <h3>${p.name}</h3>
-    <div class="card-price">
-      ${priceHTML}
-    </div>
+    ${priceHTML}
 
     ${
       userRole === "admin"

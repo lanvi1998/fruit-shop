@@ -8,85 +8,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-.search-box{
-  position:relative;
-}
 
-#searchResults{
-  position:absolute;
-  top:100%;
-  left:0;
-  width:100%;
-  background:white;
-  border:1px solid #ddd;
-  border-radius:6px;
-  max-height:250px;
-  overflow-y:auto;
-  display:none;
-  z-index:9999;
-}
-.search-item{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:6px 10px;
-  gap:10px;
-  cursor:pointer;
-}
-
-.search-price{
-  font-size:13px;
-  color:#2e7d32;
-  font-weight:600;
-}
-
-.search-left{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.search-left img{
-  width:32px;
-  height:32px;
-  object-fit:cover;
-  border-radius:6px;
-}
-
-.search-name{
-  font-size:14px;
-}
-
-.search-price{
-  font-size:13px;
-  color:#2e7d32;
-  font-weight:600;
-}
-
-.search-item:hover{
-  background:#f2f2f2;
-}
-  /* BODY */
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f2f5;
-    margin: 0;
-    padding: 0;
-  }
   
-  /* HEADER / FOOTER */
-  header,
-  footer {
-    background: white;
-    color: white;
-    text-align: center;
-    padding: 15px 20px;
-  }
-  
-  header h1 {
-    margin: 0;
-    font-size: 24px;
-  }
   
   footer {
     margin-top: 40px;
@@ -177,7 +100,7 @@
   }
   
   form button {
-    background: #66bb6a;
+    background: #3a8d3d;
     color: white;
     padding: 12px;
     border: none;
@@ -196,7 +119,7 @@
     display: inline-block;
     text-decoration: none;
     color: white;
-    background: #78bc16;
+    background: #3a8d3d;
     padding: 8px 15px;
     border-radius: 25px;
     margin-bottom: 15px;
@@ -206,33 +129,43 @@
   .back-btn:hover {
     background: #4e8c0b;
   }
+  h1 {
+  text-align: center;
+  color: #2e7d32;
+}
+  
+
   
   </style>
 </head>
 <body>
 
-<header>
-  <!-- HEADER -->
-<header class="header">
-  <div class="header-left">
-    <a href="index.html">
-      <img src="/logo.png" class="logo">
-    </a>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
-      <div id="searchResults"></div>
+  <header class="header">
+    <div class="header-left">
+      <a href="index.html">
+        <img src="/logo.png" class="logo">
+      </a>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
+        <div id="searchResults"></div>
+      </div>
+     
+    </div>
+    <div class="header-right">
+      <button id="loginBtn">
+        <i class="fa-solid fa-user"></i>
+      </button>
+      <button id="logoutBtn" style="display:none;"> <i class="fa-solid fa-user"></i></button>
+      
+      <a href="cart.html" class="cart-icon">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cartCount" class="cart-count">0</span>
+        </a>
     </div>
    
-  </div>
-  <div class="header-right">
     
-    <a href="cart.html" class="cart-icon">
-      <i class="fa-solid fa-cart-shopping"></i>
-      <span id="cartCount" class="cart-count">0</span>
-      </a>
-  </div>
-</header>
-
+  </header>
+  
 <!-- NAVBAR -->
 <nav>
   <a href="import.html">Trái cây nhập khẩu</a>

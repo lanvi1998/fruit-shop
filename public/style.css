@@ -671,16 +671,18 @@ nav{
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  transform: translateX(-20px); 
 }
 
 #searchInput {
   flex: 1;
-  max-width: 180px;  /* giới hạn chiều rộng */
+  max-width: 245px;  /* giới hạn chiều rộng */
   min-width: 120px;  /* tránh quá nhỏ */
   padding: 10px 10px;
   font-size: 14px;
   border-radius: 6px;
+  transform: translateX(-30px); 
 }
 
 @media (max-width:768px){
@@ -1200,7 +1202,7 @@ button.buy-now {
     border-radius: 8px;
     box-sizing: border-box;
   }
-
+ 
   /* màu nút */
   .card-content .btn-group .buy-now {
     background: #ff4500 !important;

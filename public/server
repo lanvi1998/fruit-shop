@@ -517,27 +517,22 @@ str = str.trim().replace(/\s+/g, " ");
 };
 
 // Tìm sản phẩm theo tên (không phân biệt hoa/thường và dấu)
-app.get("/api/search", async (req, res) => {
-  try {
-    const q = req.query.q?.trim() || "";
-    if (!q) return res.json([]);
+        app.get("/api/search", async (req, res) => {
+        try {
+        const q = req.query.q?.trim() || "";
+        if (!q) return res.json([]);
 
-    const products = await Fruit.find();
+    const products = await Fruit.find({
+    name: { $regex: q, $options: "i" }   // tìm không phân biệt hoa thường
+});
 
-    const keyword = removeVietnameseTones(q);
-
-    const result = products.filter(p => {
-      const name = removeVietnameseTones(p.name);
-      return name.includes(keyword);
-    });
-
-    res.json(result);
+        res.json(products || []);
 
   } catch (err) {
-    console.error("Search error:", err);
+        console.error("Search error:", err);
     res.status(500).json({ error: err.message });
-  }
-});
+        }
+        });
 // ===== GET 1 sản phẩm theo ID =====
         app.get("/api/fruits/product/:id", async (req, res) => {
         try {
