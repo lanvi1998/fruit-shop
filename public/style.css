@@ -84,6 +84,7 @@ body {
 
 /* item */
 #searchResults div{
+  
   padding:10px;
   cursor:pointer;
   border-bottom:1px solid #eee;
@@ -776,11 +777,17 @@ nav{
 .cart-qty button:hover { background: #2e7d32; }
 
 #qtyInput {
-  width: 50px;
-  text-align: center;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #000c01;
+  background: white;
+  color: #000c01;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
   /* ADMIN */

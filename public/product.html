@@ -9,6 +9,49 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+  .cart-qty{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 30px;
+}
+
+.cart-qty button{
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #5e9d7d;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cart-qty button:hover{
+  background: #4a8a6b;
+}
+
+.cart-qty input{
+  width: 50px;
+  height: 32px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* bỏ mũi tên input number */
+.cart-qty input::-webkit-outer-spin-button,
+.cart-qty input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cart-qty input[type=number]{
+  -moz-appearance: textfield;
+}
   @media (max-width:768px){
   #adminThumbs{
     margin-bottom:120px;
@@ -60,7 +103,9 @@
   .search-box {
   position: relative;
   flex: 1;
-  min-width: 0;
+  min-width: 200px;
+  max-width: 400px;
+  width: 100%;
 }
 .header, .header-left {
   overflow: visible;
@@ -197,13 +242,13 @@ margin:10px 0;
     align-items: center;            /* canh giữa theo chiều dọc */
     border-radius: 6px;
     overflow: hidden;
-    border: 1px solid #000c01;     /* khung tổng */
+    /* khung tổng */
 }
 
 .cart-qty button {
     width: 35px;
     height: 35px;
-    border: 1px solid #000c01;     /* khung từng nút */
+    border: 1px solid #66bb6a;     /* khung từng nút */
     background: white;              /* nền trắng */
     color: #66bb6a;                 /* dấu cộng trừ xanh */
     font-size: 18px;
@@ -314,6 +359,12 @@ z-index:9999;
 /* MOBILE: đưa mô tả xuống cuối */
 /* MOBILE: đưa mô tả xuống cuối */
 @media (max-width:768px){
+  #searchResults {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 99999; /* luôn nổi trên button */
+}
 
 .product-layout{
   display:flex;
@@ -331,6 +382,7 @@ z-index:9999;
 .product-desc-wrapper{
   order:3;
 }
+
 /* Thanh mua hàng nổi */
 .floating-cart-bar {
   position: fixed;      /* luôn cố định trên màn hình */
@@ -345,55 +397,34 @@ z-index:9999;
   z-index: 9999;
   align-items: center;
   justify-content: space-between;
+  margin-right: 20px;
 }
 
 /* Thanh số lượng */
-.floating-cart-bar .cart-qty {
-  display: inline-flex;
-  gap: 5px;
+.floating-cart-bar .cart-qty{
+  display: flex;
+  gap: 4px;
+
+  border: none;        /* bỏ khung */
+  background: none;    /* bỏ nền */
+  box-shadow: none;    /* bỏ bóng */
+  padding: 0;
 }
 
-.floating-cart-bar .cart-qty button {
+.floating-cart-bar .cart-qty button{
   width: 35px;
   height: 35px;
-  border: 1px solid #000c01;
-  background: white;
-  color: #28a745;
-  font-size: 18px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 1px solid #ddd;
+  background: #fff;
   border-radius: 6px;
 }
 
-.floating-cart-bar .cart-qty input {
+.floating-cart-bar .cart-qty input{
   width: 50px;
-  border: 1px solid #000c01;
   text-align: center;
-  font-weight: bold;
-  outline: none;
-}
-
-/* Nút hành động */
-.floating-cart-bar button#addToCartBtn,
-.floating-cart-bar button#buyNowBtn {
-  flex: 1;              /* tự động giãn đều */
-  padding: 10px 0;
+  border: 1px solid #ddd;
   border-radius: 6px;
-  border: none;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: all 0.2s ease;
 }
-
-#addToCartBtn { background: #28a745; }
-#addToCartBtn:hover { background: #218838; }
-
-#buyNowBtn { background: #dc3545; }
-#buyNowBtn:hover { background: #c82333; }
 
 /* Ẩn trên desktop nếu muốn */
 }
@@ -417,12 +448,14 @@ z-index:9999;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+   
+    margin-right: 50px;
   }
 
   .floating-cart-bar .cart-qty {
     display: flex;
     gap: 4px;
+   
   }
 
   .floating-cart-bar .cart-qty button {
@@ -430,6 +463,7 @@ z-index:9999;
     height: 35px;
     font-size: 18px;
     border-radius: 6px;
+    border: 1px solid #28a745;
   }
 
   .floating-cart-bar .cart-qty input {
@@ -437,7 +471,8 @@ z-index:9999;
     text-align: center;
     font-weight: bold;
     font-size: 16px;
-    padding: 0 4px;
+    padding: 0 2px;
+    border: 1px solid #28a745;
   }
 
   .floating-cart-bar .total-price {
@@ -527,11 +562,45 @@ z-index:9999;
   gap: 10px;
   z-index: 9999;
 }
-#searchResults {
+.header {
+  position: relative;
+  z-index: 1;
+}
+}
+@media (max-width:768px) {
+  .search-box {
+    flex: 1;
+    width: 100%;
+    max-width:250;
+  }
+
+  #searchInput {
+    max-width: 245px;
+    
+    
+  }
+  #searchResults{
+  padding: 12px;
+  cursor: pointer;
   position: absolute;
   top: 100%;
-  left: 0;
-  z-index: 99999; /* luôn nổi trên button */
+
+  left: -27px;      /* kéo qua trái */
+  width: 110%;      /* to hơn ô search */
+
+  background: #5e9d7d;
+  color: #000;
+
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+
+  z-index: 99999;
+  display: none;
+
+  max-height: 300px;
+  overflow-y: auto;
+  min-height: 120px;   /* 🔥 luôn giữ kích thước */
+  max-height: 300px;
 }
 }
 </style>
@@ -1253,7 +1322,57 @@ document.addEventListener("click",(e)=>{
   }
 });
 
+searchInput.addEventListener("input",()=>{
 
+const keyword = searchInput.value.toLowerCase()
+
+searchResults.innerHTML=""
+
+if(keyword===""){
+searchResults.style.display="none"
+return
+}
+
+const result = allProducts.filter(p=>
+p.name.toLowerCase().includes(keyword)
+)
+
+// 🔥 nếu không tìm thấy
+if(result.length === 0){
+searchResults.innerHTML = `
+<div style="padding:12px; text-align:center;">
+Không tìm thấy sản phẩm
+</div>
+`
+searchResults.style.display="block"
+return
+}
+
+result.slice(0,5).forEach(p=>{
+
+const div = document.createElement("div")
+
+div.innerHTML = `
+<div style="display:flex; align-items:center; gap:8px;">
+<img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
+<div>
+<strong>${p.name}</strong><br>
+<small>${Number(p.price).toLocaleString()} VND</small>
+</div>
+</div>
+`
+
+div.onclick = ()=>{
+window.location.href="product.html?id="+p._id
+}
+
+searchResults.appendChild(div)
+
+})
+
+searchResults.style.display="block"
+
+})
 </script>
 
 <script>
