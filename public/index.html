@@ -1327,7 +1327,7 @@ document.getElementById("uploadProductBtn").addEventListener("click", async () =
   formData.append("image", image); // bắt buộc "image"
   formData.append("salePercent", salePercent);
   try {
-    const res = await fetch(API + "/upload", {  // 🔹 sửa endpoint đúng
+    const res = await fetch(API + "/api/upload", {  // 🔹 sửa endpoint đúng
       method: "POST",
       body: formData
     });
@@ -1376,7 +1376,7 @@ function updateCartCount(){
 }
 
 function deleteProduct(id){
-  fetch(API + "/fruits/"+id,{method:"DELETE", headers:{"Content-Type":"application/json"}, body: JSON.stringify({username: localStorage.getItem("username")})})
+  fetch(API + "/api/fruits/"+id,{method:"DELETE", headers:{"Content-Type":"application/json"}, body: JSON.stringify({username: localStorage.getItem("username")})})
   .then(()=>loadProducts());
 }
 
@@ -1385,7 +1385,7 @@ function deleteProduct(id){
 async function loadBanners(){
   try{
 
-    const res = await fetch(API + "/banners");
+    const res = await fetch(API + "/api/banners");
     const banners = await res.json();
 
     const slidesContainer = document.querySelector(".banner-slider .slides");
@@ -1689,7 +1689,7 @@ document.getElementById("uploadBannerBtn").addEventListener("click", async ()=>{
   formData.append("image",file);
   formData.append("username",localStorage.getItem("username"));
   try{
-    const res=await fetch(API + "/banner/upload",{method:"POST", body:formData});
+    const res=await fetch(API + "/api/banner/upload",{method:"POST", body:formData});
     const data=await res.json();
     if(data.error){ alert("Upload lỗi: "+data.error); return; }
     alert("Upload banner thành công!");
