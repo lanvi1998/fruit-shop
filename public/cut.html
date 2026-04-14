@@ -327,8 +327,7 @@ searchInput.addEventListener("input", ()=>{
 async function fetchSearchResults(query){
   if(!query){ searchResults.style.display="none"; return; }
   try{
-    const res = await fetch(`API + "/api
-    /search?q=${encodeURIComponent(query)}`);
+    const res = await fetch(API + `/api/search?q=${encodeURIComponent(query)}`);
     const products = await res.json();
     currentResults = products;
     renderResults(products);
