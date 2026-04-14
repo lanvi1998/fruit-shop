@@ -1381,57 +1381,31 @@ function deleteProduct(id){
 }
 
 
+// Load banners từ API
 async function loadBanners(){
   try{
 
     const res = await fetch(API + "/api/banners");
-
-    if(!res.ok){
-      console.log("❌ API lỗi:", res.status);
-      return;
-    }
-
-    const text = await res.text();
-
-    let banners;
-    try {
-      banners = JSON.parse(text);
-    } catch (err) {
-      console.log("❌ Không phải JSON:", text);
-      return;
-    }
+    const banners = await res.json();
 
     const slidesContainer = document.querySelector(".banner-slider .slides");
     const dotsWrapper = document.getElementById("bannerDots");
 
-    if (!slidesContainer || !dotsWrapper) {
-      console.log("❌ Thiếu DOM slider");
-      return;
-    }
+    slidesContainer.innerHTML="";
+    dotsWrapper.innerHTML="";
 
-    slidesContainer.innerHTML = "";
-    dotsWrapper.innerHTML = "";
-
-    banners.forEach((b, i) => {
+    banners.forEach((b,i)=>{
 
       const slide = document.createElement("div");
-      slide.style.position = "relative";
+      slide.style.position="relative";
 
       const img = document.createElement("img");
       img.src = b.image;
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = "cover";
+      img.style.width="100%";
+      img.style.height="100%";
+      img.style.objectFit="cover";
 
       slide.appendChild(img);
-      slidesContainer.appendChild(slide);
-
-    });
-
-  } catch(err){
-    console.log("Lỗi load banners:", err);
-  }
-}
 
       /* ===== NÚT XOÁ CHO ADMIN ===== */
       if(window.userRole === "admin"){
