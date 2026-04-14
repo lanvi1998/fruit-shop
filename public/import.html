@@ -127,6 +127,7 @@
 
 <script>
 // ===== GLOBAL =====
+const API = "https://coutsaigon-production.up.railway.app";
 let userRole = null;
 updateCartCount();
 
@@ -141,7 +142,7 @@ document.getElementById("loginBtnPopup").addEventListener("click", async ()=>{
   if(!username || !password){ alert("Điền đầy đủ username và password!"); return; }
 
   try{
-    const res = await fetch("/api/login",{
+    const res = await fetch(API + "/login",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({username,password})
@@ -190,7 +191,7 @@ window.addEventListener("load",()=>{
 // ===== PRODUCTS =====
 async function loadProducts(){
   try{
-    const res = await fetch("/api/fruits");
+    const res = await fetch(API + "/api/fruits");
     const products = await res.json();
     const grid = document.getElementById("highlight");
     grid.innerHTML="";
@@ -247,7 +248,7 @@ document.getElementById("uploadProductBtn").addEventListener("click", async ()=>
   formData.append("image", image);
 
   try{
-    const res = await fetch("/api/upload",{method:"POST", body:formData});
+    const res = await fetch(API + "/api/upload",{method:"POST", body:formData});
     const data = await res.json();
     if(data.error){ alert("Upload lỗi: "+data.error); return; }
     alert("Upload sản phẩm thành công!");
@@ -260,7 +261,7 @@ document.getElementById("uploadProductBtn").addEventListener("click", async ()=>
 });
 
 function deleteProduct(id){
-  fetch("/api/fruits/"+id,{
+  fetch(API + "/api/fruits/"+id,{
     method:"DELETE",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({username: localStorage.getItem("username")})
@@ -274,7 +275,7 @@ async function editPrice(id, oldPrice){
   const username = localStorage.getItem("username");
 
   try{
-    const res = await fetch(`/api/fruits/${id}/price`,{
+    const res = await fetch(API + `/api/fruits/${id}/price`, {
       method:"PUT",
       headers:{
         "Content-Type":"application/json"
@@ -326,7 +327,7 @@ searchInput.addEventListener("input", ()=>{
 async function fetchSearchResults(query){
   if(!query){ searchResults.style.display="none"; return; }
   try{
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+    const res = await fetch(API + `/api/search?q=${encodeURIComponent(query)}`);
     const products = await res.json();
     currentResults = products;
     renderResults(products);
