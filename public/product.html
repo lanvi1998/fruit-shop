@@ -953,7 +953,7 @@ updateCartCount()
 async function loadProduct(){
   const mainImage = document.getElementById("mainImage")
 
-    const res = await fetch("/api/fruits/" + productId)
+  const res = await fetch(API + "/api/fruits/" + productId)
     const p = await res.json()
 
     productPrice = Number(p.price)
@@ -1073,7 +1073,7 @@ function enableSwipeThumbs(product){
 async function deleteThumb(src, element){
     if(!confirm("Xoá ảnh này?")) return;
 
-    const res = await fetch(`/api/fruits/${productId}/thumb`, {
+    const res = await fetch(API + `/api/fruits/${productId}/thumb`, {
         method:"DELETE",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({
@@ -1152,7 +1152,7 @@ const formData = new FormData()
 formData.append("thumb",file)
 formData.append("username",username)
 
-const res = await fetch("/api/fruits/"+productId+"/thumb",{
+const res = await fetch(API + "/api/fruits/"+productId+"/thumb",{
 method:"POST",
 body:formData
 })
@@ -1199,7 +1199,7 @@ alert(data.message)
 
 document.getElementById("addToCartBtn").onclick=async()=>{
 
-const res = await fetch("/api/fruits/product/"+productId)
+  const res = await fetch(API + "/api/fruits/product/"+productId)
 
 const p = await res.json()
 
@@ -1248,7 +1248,7 @@ document.getElementById("saveBtn").onclick = async () => {
     // Lấy HTML từ editor rich text
     const desc = document.getElementById("editor").innerHTML;
 
-    const res = await fetch(`/api/fruits/${productId}/description`, {
+    const res = await fetch(API + `/api/fruits/${productId}/description`, {
         method:"PUT",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({username, description: desc})
@@ -1271,7 +1271,7 @@ const searchResults = document.getElementById("searchResults")
 
 let allProducts = []
 
-fetch("/api/fruits")
+fetch(API + "/api/fruits")
 .then(res=>res.json())
 .then(data=>{
 allProducts = data

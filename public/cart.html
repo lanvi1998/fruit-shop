@@ -477,7 +477,7 @@ function renderResults(products){
       </div>
     `;
     div.dataset.index = i;
-    div.addEventListener("click", ()=> window.location.href = `/product.html?id=${p._id}`);
+    div.addEventListener("click", ()=> window.location.href = `product.html?id=${p._id}`);
     searchResults.appendChild(div);
   });
 
