@@ -816,19 +816,22 @@ z-index:9999;
 <div id="cartAlert">Đã thêm vào giỏ</div>
 
 <script>
+  const API = "https://coutsaigon-production.up.railway.app";
   //thêm
   document.getElementById("buyNowBtn").onclick = async () => {
-    const res = await fetch("/api/fruits/product/" + productId);
+    const res = awaitfetch("/api/fruits/" + productId);
     const p = await res.json();
 
     // Lưu riêng cho Mua ngay
-    const buyNowOrder = {
-        id: p._id,
-        name: p.name,
-        price: p.price,
-        image: p.image,
-        qty: Number(qtyInput.value)
-    };
+    const qty = document.getElementById("qtyInput").value;
+
+const buyNowOrder = {
+    id: p._id,
+    name: p.name,
+    price: p.price,
+    image: p.image,
+    qty: Number(qty)
+};
 
     localStorage.setItem("buyNowOrder", JSON.stringify(buyNowOrder));
 
@@ -950,7 +953,7 @@ updateCartCount()
 async function loadProduct(){
   const mainImage = document.getElementById("mainImage")
 
-    const res = await fetch("/api/fruits/product/"+productId)
+    const res = await fetch("/api/fruits/" + productId)
     const p = await res.json()
 
     productPrice = Number(p.price)
@@ -1070,7 +1073,7 @@ function enableSwipeThumbs(product){
 async function deleteThumb(src, element){
     if(!confirm("Xoá ảnh này?")) return;
 
-    const res = await fetch("/api/fruits/"+productId+"/thumb", {
+    const res = await fetch(`/api/fruits/${productId}/thumb`, {
         method:"DELETE",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({
@@ -1245,7 +1248,7 @@ document.getElementById("saveBtn").onclick = async () => {
     // Lấy HTML từ editor rich text
     const desc = document.getElementById("editor").innerHTML;
 
-    const res = await fetch("/api/fruits/"+productId+"/description",{
+    const res = await fetch(`/api/fruits/${productId}/description`, {
         method:"PUT",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({username, description: desc})
