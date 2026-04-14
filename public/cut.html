@@ -276,7 +276,7 @@ async function editPrice(id, oldPrice){
   const username = localStorage.getItem("username");
 
   try{
-    const res = await fetch(`API + "/api/fruits/${id}/price`,{
+    const res = await fetch(API + `/api/fruits/${id}/price`, {
       method:"PUT",
       headers:{
         "Content-Type":"application/json"
