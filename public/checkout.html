@@ -253,7 +253,7 @@
 <!-- <footer>© 2026 Fruit Shop</footer> -->
 <script>
 // ===== CẤU HÌNH =====
-const API_URL = "https://coutsaigon-production.up.railway.app";// Thay server của bạn
+const API = "https://coutsaigon-production.up.railway.app";
 const summary = document.getElementById("cart-summary");
 const urlParams = new URLSearchParams(window.location.search);
 const isBuyNow = urlParams.get("buyNow");
@@ -371,11 +371,12 @@ let timer, selectedIndex=-1, currentResults=[];
 searchInput.addEventListener("input", ()=>{
   clearTimeout(timer);
   timer = setTimeout(()=> fetchSearchResults(searchInput.value.trim()),300);
+
 });
 async function fetchSearchResults(query){
   if(!query){ searchResults.style.display="none"; return; }
   try{
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+    const res = await fetch(API + `/api/search?q=${encodeURIComponent(query)}`);
     const products = await res.json();
     currentResults = products;
     renderResults(products);
