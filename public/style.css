@@ -528,6 +528,47 @@ nav{
  /* ===== MOBILE ===== */
 
 /* ===== MOBILE STYLES (≤768px) ===== */
+@media (max-width:768px){
+
+  .banner-container{
+    width:100%;
+    overflow:hidden;
+  }
+
+  .banner-slider{
+    width:100%;
+    height:220px;
+    overflow:hidden;
+    position:relative;
+    background:#f5f5f5; /* tránh trắng */
+  }
+
+  /* CHỈ DÙNG FLEX + TRANSFORM (theo JS của bạn) */
+  .banner-slider .slides{
+    display:flex;
+    width:100%;
+    height:100%;
+    transition: transform 0.5s ease;
+  }
+
+  .banner-slider .slides > div{
+    flex:0 0 100%;
+    width:100%;
+    height:100%;
+  }
+
+  .banner-slider .slides img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .banner-slider .next,
+  .banner-slider .prev{
+    display:none;
+  }
+}
 /* ===== MOBILE STYLES (≤768px) ===== */
 /* ===== MOBILE BANNER (≤768px) ===== */
 @media (max-width:768px){
@@ -550,11 +591,11 @@ nav{
     width:100%;
     height:100%;
 
-    overflow-x:auto;
+    /* overflow-x:auto;
     scroll-snap-type:x mandatory;
     scroll-behavior:smooth;
 
-    -webkit-overflow-scrolling:touch;
+    -webkit-overflow-scrolling:touch; */
   }
 
   /* mỗi banner */

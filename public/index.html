@@ -14,6 +14,34 @@
 <body>
 
   <style>
+    @media (max-width: 768px) {
+
+.banner-slider {
+  overflow: hidden;
+  background: #f5f5f5; /* tránh trắng khi swipe */
+}
+
+.banner-slider .slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.banner-slider .slides > div {
+  flex: 0 0 100%;   /* mỗi slide full màn hình */
+  width: 100%;
+  height: 100%;
+}
+
+.banner-slider img {
+  width: 100%;
+  height: 140px;     /* giữ đúng mobile */
+  object-fit: cover;
+  display: block;
+  background: #f5f5f5;
+}
+}
+/*  */
    @media (max-width: 480px){
 
 body.is-admin #searchInput{
@@ -1144,8 +1172,9 @@ nav a:hover img {
   <div class="footer-container">
 
     <div class="footer-col">
-      <h3>Thông tin công ty</h3>
-      <p>CÔNG TY TRÁI CÂY</p>
+      <h3>Thông tin cửa hàng</h3>
+      <p>Fruit Shop - Trái cây nhập khẩu và nội địa</p>
+      <p>Giấy phép kinh doanh số: 052194002384</p>
       <p>Địa chỉ: 103 Lạc Long Quân, Phường Minh Phụng, TPHCM</p>
       <p>Hotline: 0905276510</p>
       <p>Email: fruitshop@gmail.com</p>
@@ -1470,16 +1499,18 @@ function enableSwipe(){
 // 
 function goToSlide(index){
   const slidesContainer = document.querySelector(".banner-slider .slides");
-  if (!slidesContainer) return;
   const slides = slidesContainer.children;
   const dots = document.querySelectorAll("#bannerDots span");
 
-  currentIndex = (index + slides.length) % slides.length;
+  if(!slides.length) return;
 
-  slidesContainer.style.transition = "transform 0.5s ease";
+  currentIndex = index;
+  if(currentIndex >= slides.length) currentIndex = 0;
+  if(currentIndex < 0) currentIndex = slides.length - 1;
+
   slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
 
-  dots.forEach(d=>d.classList.remove("active"));
+  dots.forEach(d => d.classList.remove("active"));
   if(dots[currentIndex]) dots[currentIndex].classList.add("active");
 }
 
