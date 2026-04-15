@@ -957,7 +957,7 @@ async function loadProduct(){
     const p = await res.json()
 
     productPrice = Number(p.price)
-    document.getElementById("mainImage").src = p.image; // ảnh chính
+    document.getElementById("mainImage").src = API + "/" + p.image;// ảnh chính
     document.getElementById("productName").innerText = p.name
     document.getElementById("productPrice").innerText = productPrice.toLocaleString()+" VND"
     document.getElementById("productUnit").innerText = "Đơn vị: "+p.unit
@@ -998,7 +998,7 @@ function enableSwipeThumbs(product){
 
     thumbs.forEach(src => {
         const img = document.createElement("img");
-        img.src = src;
+        document.getElementById("mainImage").src = API + "/" + p.image;
 
         const div = document.createElement("div");
         div.appendChild(img);
@@ -1012,7 +1012,7 @@ function enableSwipeThumbs(product){
         };
 
         // nếu là ảnh chính, mặc định highlight
-        if(src === product.image){
+        if(src === product.image || API + "/" + src === API + "/" + product.image){
             img.classList.add("selected");
             mainImage.src = src;
         }
