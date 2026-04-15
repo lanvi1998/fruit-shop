@@ -1150,7 +1150,7 @@ const formData = new FormData()
 formData.append("thumb",file)
 formData.append("username",username)
 
-const res = await fetch("/api/fruits/"+productId+"/thumb",{
+const res = await fetch(`${API}/api/fruits/${productId}/thumb`, {
 method:"POST",
 body:formData
 })
@@ -1197,7 +1197,7 @@ alert(data.message)
 
 document.getElementById("addToCartBtn").onclick=async()=>{
 
-const res = await fetch("/api/fruits/product/"+productId)
+  const res = await fetch(`${API}/api/fruits/product/${productId}`);
 
 const p = await res.json()
 
