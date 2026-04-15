@@ -1246,7 +1246,7 @@ document.getElementById("saveBtn").onclick = async () => {
     // Lấy HTML từ editor rich text
     const desc = document.getElementById("editor").innerHTML;
 
-    const res = await fetch("/api/fruits/"+productId+"/description",{
+    const res = await fetch(`${API}/api/fruits/${productId}/description`, {
         method:"PUT",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({username, description: desc})
