@@ -991,111 +991,57 @@ function enableSwipeThumbs(product){
 
     thumbContainer.innerHTML = "";
 
-    // Tạo mảng thumbnails, đưa ảnh chính lên đầu
     let thumbs = [];
-    if(product.image) thumbs.push(product.image);
-    if(product.thumbs && product.thumbs.length) thumbs = thumbs.concat(product.thumbs);
 
-    thumbs.forEach(src => {
+    // gom ảnh chính + ảnh phụ
+    if(product.image) thumbs.push(product.image);
+    if(product.thumbs?.length) thumbs = thumbs.concat(product.thumbs);
+
+    if(!thumbs.length) return;
+
+    const getImgUrl = (src) =>
+        src.startsWith("http") ? src : API + "/" + src;
+
+    // set ảnh đầu tiên
+    mainImage.src = getImgUrl(thumbs[0]);
+
+    thumbs.forEach((src, index) => {
+
+        const imgUrl = getImgUrl(src);
+
         const img = document.createElement("img");
-        document.getElementById("mainImage").src = API + "/" + p.image;
+        img.src = imgUrl;
 
         const div = document.createElement("div");
         div.appendChild(img);
 
-        // click thay ảnh chính
+        // active mặc định ảnh đầu
+        if(index === 0){
+            img.classList.add("selected");
+        }
+
+        // click đổi ảnh chính
         img.onclick = () => {
-            mainImage.src = img.src;
-            // highlight thumbnail đang chọn
-            thumbContainer.querySelectorAll("img").forEach(i => i.classList.remove("selected"));
+            mainImage.src = imgUrl;
+
+            thumbContainer.querySelectorAll("img")
+                .forEach(i => i.classList.remove("selected"));
+
             img.classList.add("selected");
         };
 
-        // nếu là ảnh chính, mặc định highlight
-        if(src === product.image || API + "/" + src === API + "/" + product.image){
-            img.classList.add("selected");
-            mainImage.src = src;
-        }
-
-        // admin thêm nút xoá
+        // admin xoá ảnh
         if(userRole === "admin"){
             const del = document.createElement("span");
             del.innerText = "❌";
-            del.onclick = () => deleteThumb(img.src, div);
+
+            del.onclick = () => deleteThumb(src, div);
+
             div.appendChild(del);
         }
 
         thumbContainer.appendChild(div);
     });
-
-    // Swipe support
-    let isDragging = false;
-    let startX = 0;
-
-    thumbContainer.addEventListener("mousedown", e => {
-        isDragging = true;
-        startX = e.clientX;
-    });
-
-    thumbContainer.addEventListener("mouseup", e => handleEnd(e.clientX));
-    thumbContainer.addEventListener("mouseleave", e => isDragging && handleEnd(e.clientX));
-
-    thumbContainer.addEventListener("touchstart", e => {
-        isDragging = true;
-        startX = e.touches[0].clientX;
-    });
-    thumbContainer.addEventListener("touchend", e => handleEnd(e.changedTouches[0].clientX));
-
-    function handleEnd(endX){
-        if(!isDragging) return;
-        const diff = endX - startX;
-        const thumbs = Array.from(thumbContainer.querySelectorAll("img"));
-        if(!thumbs.length) return;
-
-        const currentIndex = thumbs.findIndex(img => img.src === mainImage.src);
-        let newIndex = currentIndex;
-
-        if(diff > 30){
-            newIndex = currentIndex > 0 ? currentIndex - 1 : thumbs.length - 1;
-        } else if(diff < -30){
-            newIndex = currentIndex < thumbs.length - 1 ? currentIndex + 1 : 0;
-        }
-
-        mainImage.src = thumbs[newIndex].src;
-        // highlight thumbnail
-        thumbs.forEach(i => i.classList.remove("selected"));
-        thumbs[newIndex].classList.add("selected");
-
-        isDragging = false;
-    }
-}
-//thumb
-async function deleteThumb(src, element){
-    if(!confirm("Xoá ảnh này?")) return;
-
-    const res = await fetch(API + `/api/fruits/${productId}/thumb`, {
-        method:"DELETE",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({
-            username: localStorage.getItem("username"),
-            image: src
-        })
-    });
-
-    const data = await res.json();
-
-    if(data.success){
-        element.remove();
-        // xoá khỏi adminThumbs nếu có
-        const adminImgs = document.querySelectorAll("#adminThumbs img");
-        adminImgs.forEach(img=>{
-            if(img.src === src) img.remove();
-        });
-
-        alert("Đã xoá ảnh");
-    }else{
-        alert(data.message);
-    }
 }
 
 /* QTY */
