@@ -819,7 +819,7 @@ z-index:9999;
   const API = "https://coutsaigon-production.up.railway.app";
   //thêm
   document.getElementById("buyNowBtn").onclick = async () => {
-    const res = await fetch("/api/fruits/product/" + productId);
+    const res = await fetch(API + "/api/fruits/product/" + productId);
     const p = await res.json();
 
     // Lưu riêng cho Mua ngay
@@ -1269,7 +1269,7 @@ const searchResults = document.getElementById("searchResults")
 
 let allProducts = []
 
-fetch("/api/fruits")
+fetch(API + "/api/fruits")
 .then(res=>res.json())
 .then(data=>{
 allProducts = data
