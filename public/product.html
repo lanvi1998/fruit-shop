@@ -816,6 +816,7 @@ z-index:9999;
 <div id="cartAlert">Đã thêm vào giỏ</div>
 
 <script>
+  const API = "https://coutsaigon-production.up.railway.app";
   //thêm
   document.getElementById("buyNowBtn").onclick = async () => {
     const res = await fetch("/api/fruits/product/" + productId);
@@ -826,7 +827,7 @@ z-index:9999;
         id: p._id,
         name: p.name,
         price: p.price,
-        image: p.image,
+        image:API + p.image,
         qty: Number(qtyInput.value)
     };
 
@@ -954,7 +955,7 @@ async function loadProduct(){
     const p = await res.json()
 
     productPrice = Number(p.price)
-    document.getElementById("mainImage").src = p.image; // ảnh chính
+    document.getElementById("mainImage").src = API + p.image; // ảnh chính
     document.getElementById("productName").innerText = p.name
     document.getElementById("productPrice").innerText = productPrice.toLocaleString()+" VND"
     document.getElementById("productUnit").innerText = "Đơn vị: "+p.unit
@@ -1217,7 +1218,7 @@ cart.push({
 id:p._id,
 name:p.name,
 price:p.price,
-image:p.image,
+image:API + p.image,
 qty:qty
 
 })
@@ -1295,7 +1296,7 @@ const div = document.createElement("div")
 
 div.innerHTML = `
   <div style="display:flex; align-items:center; gap:8px;">
-    <img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
+    <img src="${API + p.image}" alt="${API + p.image}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
     <div>
       <strong>${p.name}</strong><br>
       <small>${Number(p.price).toLocaleString()} VND</small>
@@ -1322,20 +1323,20 @@ document.addEventListener("click",(e)=>{
   }
 });
 
-searchInput.addEventListener("input",()=>{
+// searchInput.addEventListener("input",()=>{
 
-const keyword = searchInput.value.toLowerCase()
+// const keyword = searchInput.value.toLowerCase()
 
-searchResults.innerHTML=""
+// searchResults.innerHTML=""
 
-if(keyword===""){
-searchResults.style.display="none"
-return
-}
+// if(keyword===""){
+// searchResults.style.display="none"
+// return
+// }
 
-const result = allProducts.filter(p=>
-p.name.toLowerCase().includes(keyword)
-)
+// const result = allProducts.filter(p=>
+// p.name.toLowerCase().includes(keyword)
+// )
 
 // 🔥 nếu không tìm thấy
 if(result.length === 0){
@@ -1354,7 +1355,7 @@ const div = document.createElement("div")
 
 div.innerHTML = `
 <div style="display:flex; align-items:center; gap:8px;">
-<img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
+<img src="${API + p.image}" alt="${API + p.image}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">
 <div>
 <strong>${p.name}</strong><br>
 <small>${Number(p.price).toLocaleString()} VND</small>
